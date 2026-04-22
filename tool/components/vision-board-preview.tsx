@@ -1,22 +1,11 @@
 "use client"
 
-import Image from "next/image"
-import { X, MapPin, Sparkles, Heart, Compass, Sunset, Landmark, UtensilsCrossed, Users, User,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
-  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { X, Sparkles } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Destination } from "@/lib/destinations"
 import type { UploadedImage } from "@/components/image-uploader"
-import { vibes } from "@/lib/vibes"
-import { cn } from "@/lib/utils"
+import { vibes, type Vibe } from "@/lib/vibes"
 import { TripSummary } from "@/components/trip-summary"
-
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
-  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell
-}
 
 interface VisionBoardPreviewProps {
   pinnedDestinations: Destination[]
@@ -27,15 +16,40 @@ interface VisionBoardPreviewProps {
   onRemoveVibe: (id: string) => void
 }
 
+type BoardItem =
+  | { type: "destination"; id: string; imageUrl: string; label: string; sublabel: string }
+  | { type: "vibe"; id: string; imageUrl: string; label: string; sublabel: string }
+  | { type: "upload"; id: string; imageUrl: string; label: string; sublabel: string }
+
+const sizePattern = [
+  "col-span-2 row-span-2",
+  "col-span-1 row-span-1",
+  "col-span-1 row-span-2",
+  "col-span-1 row-span-1",
+  "col-span-1 row-span-1",
+  "col-span-2 row-span-1",
+  "col-span-1 row-span-1",
+  "col-span-1 row-span-1",
+]
+
+const categoryLabels: Record<string, string> = {
+  style: "Vibe",
+  activity: "Activity",
+  accommodation: "Stay",
+}
+
 export function VisionBoardPreview({
   pinnedDestinations,
   uploadedImages,
   selectedVibes,
   onRemoveDestination,
   onRemoveImage,
-  onRemoveVibe
+  onRemoveVibe,
 }: VisionBoardPreviewProps) {
-  const isEmpty = pinnedDestinations.length === 0 && uploadedImages.length === 0 && selectedVibes.length === 0
+  const isEmpty =
+    pinnedDestinations.length === 0 &&
+    uploadedImages.length === 0 &&
+    selectedVibes.length === 0
 
   if (isEmpty) {
     return (
@@ -53,109 +67,69 @@ export function VisionBoardPreview({
     )
   }
 
-  const selectedVibeObjects = selectedVibes.map(id => vibes.find(v => v.id === id)).filter(Boolean)
+  const selectedVibeObjects = selectedVibes
+    .map(id => vibes.find(v => v.id === id))
+    .filter((v): v is Vibe => v !== undefined)
+
+  const items: BoardItem[] = [
+    ...pinnedDestinations.map(d => ({
+      type: "destination" as const,
+      id: d.id,
+      imageUrl: d.imageUrl,
+      label: d.name,
+      sublabel: d.country,
+    })),
+    ...selectedVibeObjects.map(v => ({
+      type: "vibe" as const,
+      id: v.id,
+      imageUrl: v.imageUrl,
+      label: v.name,
+      sublabel: categoryLabels[v.category] ?? v.category,
+    })),
+    ...uploadedImages.map(img => ({
+      type: "upload" as const,
+      id: img.id,
+      imageUrl: img.dataUrl,
+      label: img.name,
+      sublabel: "My inspiration",
+    })),
+  ]
+
+  const handleRemove = (item: BoardItem) => {
+    if (item.type === "destination") onRemoveDestination(item.id)
+    else if (item.type === "vibe") onRemoveVibe(item.id)
+    else onRemoveImage(item.id)
+  }
 
   return (
     <div className="space-y-6">
-      {/* Trip Summary */}
-      <TripSummary 
-        selectedVibes={selectedVibes} 
-        pinnedDestinations={pinnedDestinations} 
-      />
+      <TripSummary selectedVibes={selectedVibes} pinnedDestinations={pinnedDestinations} />
 
-      {/* Selected Vibes */}
-      {selectedVibeObjects.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {selectedVibeObjects.map((vibe) => {
-            if (!vibe) return null
-            const Icon = iconMap[vibe.icon]
-            return (
-              <div
-                key={vibe.id}
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium border",
-                  vibe.color
-                )}
-              >
-                {Icon && <Icon className="w-4 h-4" />}
-                <span>{vibe.name}</span>
-                <button
-                  onClick={() => onRemoveVibe(vibe.id)}
-                  className="ml-1 hover:opacity-70 transition-opacity"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  <span className="sr-only">Remove {vibe.name}</span>
-                </button>
-              </div>
-            )
-          })}
-        </div>
-      )}
-
-      {/* Images Grid */}
-      {(pinnedDestinations.length > 0 || uploadedImages.length > 0) && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {pinnedDestinations.map((destination) => (
-            <Card key={destination.id} className="group relative overflow-hidden shadow-sm rounded-xl border-0">
-              <CardContent className="p-0">
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    src={destination.imageUrl}
-                    alt={destination.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => onRemoveDestination(destination.id)}
-                    className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Remove {destination.name}</span>
-                  </Button>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 text-card">
-                    <p className="text-sm font-medium">{destination.name}</p>
-                    <div className="flex items-center gap-1 text-xs text-card/80">
-                      <MapPin className="h-3 w-3" />
-                      <span>{destination.country}</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-          
-          {uploadedImages.map((image) => (
-            <Card key={image.id} className="group relative overflow-hidden shadow-sm rounded-xl border-0">
-              <CardContent className="p-0">
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    src={image.dataUrl}
-                    alt={image.name}
-                    fill
-                    className="object-cover"
-                  />
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    onClick={() => onRemoveImage(image.id)}
-                    className="absolute top-2 right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Remove image</span>
-                  </Button>
-                  <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-foreground/60 to-transparent">
-                    <p className="text-xs text-card/80">Uploaded inspiration</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+      <div
+        className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3"
+        style={{ gridAutoRows: "140px", gridAutoFlow: "dense" }}
+      >
+        {items.map((item, index) => (
+          <div
+            key={`${item.type}-${item.id}`}
+            className={`group relative overflow-hidden rounded-xl shadow-md ${sizePattern[index % sizePattern.length]}`}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.imageUrl}
+              alt={item.label}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <button
+              onClick={() => handleRemove(item)}
+              className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
+            >
+              <X className="w-3.5 h-3.5 text-white" />
+              <span className="sr-only">Remove {item.label}</span>
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

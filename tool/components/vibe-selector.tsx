@@ -1,58 +1,44 @@
 "use client"
 
-import {
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
-  Hotel, Home, Tent, Crown, Wallet, Check, Ship, Dumbbell
-} from "lucide-react"
+import { Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { vibes, vibeCategories, type Vibe } from "@/lib/vibes"
-
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
-  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell
-}
 
 interface VibeSelectorProps {
   selectedVibes: string[]
   onToggleVibe: (vibeId: string) => void
 }
 
-function VibeCard({ vibe, isSelected, onToggle }: { 
+function VibeCard({ vibe, isSelected, onToggle }: {
   vibe: Vibe
   isSelected: boolean
-  onToggle: () => void 
+  onToggle: () => void
 }) {
-  const Icon = iconMap[vibe.icon]
-  
   return (
     <button
       type="button"
       onClick={onToggle}
       className={cn(
-        "relative flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200",
-        "hover:scale-105 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary/50",
-        isSelected 
-          ? "border-primary bg-primary/5 shadow-md" 
-          : cn("border-transparent", vibe.color)
+        "relative overflow-hidden rounded-2xl aspect-square w-full",
+        "transition-all duration-200 hover:scale-[1.03] focus:outline-none",
+        isSelected
+          ? "ring-4 ring-primary ring-offset-2 shadow-xl"
+          : "shadow-md hover:shadow-xl"
       )}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={vibe.imageUrl}
+        alt={vibe.name}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
       {isSelected && (
-        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-          <Check className="w-3 h-3 text-primary-foreground" />
+        <div className="absolute top-2.5 right-2.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
+          <Check className="w-3.5 h-3.5 text-primary-foreground" />
         </div>
       )}
-      <div className={cn(
-        "w-12 h-12 rounded-xl flex items-center justify-center transition-colors",
-        isSelected ? "bg-primary text-primary-foreground" : ""
-      )}>
-        {Icon && <Icon className="w-6 h-6" />}
-      </div>
-      <span className={cn(
-        "text-sm font-medium text-center leading-tight",
-        isSelected ? "text-primary" : "text-foreground"
-      )}>
+      <span className="absolute bottom-0 left-0 right-0 px-3 py-2.5 text-white text-sm font-semibold text-left leading-tight drop-shadow-sm">
         {vibe.name}
       </span>
     </button>

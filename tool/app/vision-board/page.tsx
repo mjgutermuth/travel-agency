@@ -53,17 +53,6 @@ export default function VisionBoardPage() {
         vibes.find(v => v.id === id)?.name || id
       )
 
-      const budgetLabels: Record<string, string> = {
-        "budget": "Budget ($1,000 - $3,000)",
-        "moderate": "Moderate ($3,000 - $7,000)",
-        "luxury": "Luxury ($7,000 - $15,000)",
-        "ultra-luxury": "Ultra-Luxury ($15,000+)",
-      }
-
-      const fmtDate = (d: Date | undefined) => d
-        ? d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
-        : "Not specified"
-
       const pinnedList = pinnedDestinations.length > 0
         ? pinnedDestinations.map(d => `  • ${d.name}, ${d.country} (${d.region})`).join("\n")
         : "  None selected"
@@ -71,12 +60,6 @@ export default function VisionBoardPage() {
       const message = [
         "=== CLIENT INFO ===",
         `Phone: ${formData.phone || "Not provided"}`,
-        "",
-        "=== TRAVEL DETAILS ===",
-        `Departure: ${fmtDate(formData.departureDate)}`,
-        `Return:    ${fmtDate(formData.returnDate)}`,
-        `Trip type: ${formData.destinations || "Not specified"}`,
-        `Budget:    ${budgetLabels[formData.budget] || formData.budget || "Not specified"}`,
         "",
         "=== VISION BOARD ===",
         `Vibes: ${selectedVibeNames.length > 0 ? selectedVibeNames.join(", ") : "None selected"}`,
