@@ -47,30 +47,59 @@ export default function VisionBoardPage() {
 
   const handleSubmit = async (formData: IntakeFormData) => {
     setIsSubmitting(true)
-    
+
     try {
-      const selectedVibeNames = selectedVibes.map(id => 
+      const selectedVibeNames = selectedVibes.map(id =>
         vibes.find(v => v.id === id)?.name || id
       )
 
-      const response = await fetch("/api/submit", {
+      const budgetLabels: Record<string, string> = {
+        "budget": "Budget ($1,000 - $3,000)",
+        "moderate": "Moderate ($3,000 - $7,000)",
+        "luxury": "Luxury ($7,000 - $15,000)",
+        "ultra-luxury": "Ultra-Luxury ($15,000+)",
+      }
+
+      const fmtDate = (d: Date | undefined) => d
+        ? d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
+        : "Not specified"
+
+      const pinnedList = pinnedDestinations.length > 0
+        ? pinnedDestinations.map(d => `  • ${d.name}, ${d.country} (${d.region})`).join("\n")
+        : "  None selected"
+
+      const message = [
+        "=== CLIENT INFO ===",
+        `Phone: ${formData.phone || "Not provided"}`,
+        "",
+        "=== TRAVEL DETAILS ===",
+        `Departure: ${fmtDate(formData.departureDate)}`,
+        `Return:    ${fmtDate(formData.returnDate)}`,
+        `Trip type: ${formData.destinations || "Not specified"}`,
+        `Budget:    ${budgetLabels[formData.budget] || formData.budget || "Not specified"}`,
+        "",
+        "=== VISION BOARD ===",
+        `Vibes: ${selectedVibeNames.length > 0 ? selectedVibeNames.join(", ") : "None selected"}`,
+        `Uploaded images: ${uploadedImages.length}`,
+        `Pinned destinations (${pinnedDestinations.length}):`,
+        pinnedList,
+        ...(formData.notes ? ["", "=== NOTES ===", formData.notes] : []),
+      ].join("\n")
+
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          formData,
-          pinnedDestinations: pinnedDestinations.map(d => ({
-            name: d.name,
-            country: d.country,
-            region: d.region
-          })),
-          uploadedImagesCount: uploadedImages.length,
-          selectedVibes: selectedVibeNames
-        })
+          access_key: "4a225bc3-2f74-4246-a619-b8b53bb5e7d7",
+          subject: `New Vision Board: ${formData.name} — ${pinnedDestinations.length} destination${pinnedDestinations.length !== 1 ? "s" : ""}`,
+          name: formData.name,
+          email: formData.email,
+          message,
+        }),
       })
 
-      if (!response.ok) {
-        throw new Error("Failed to submit")
-      }
+      const result = await response.json()
+      if (!result.success) throw new Error("Submission failed")
 
       setIsSubmitted(true)
     } catch (error) {
