@@ -2,6 +2,7 @@
 const nextConfig = {
   output: "export",
   basePath: "/planner",
+  trailingSlash: true,
   typescript: {
     ignoreBuildErrors: true,
   },
