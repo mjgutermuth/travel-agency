@@ -50,7 +50,7 @@ export function IntakeForm({ onSubmit, isSubmitting }: IntakeFormProps) {
   }
 
   const inputClassName = "rounded-xl border-border focus:border-primary"
-  const buttonClassName = "rounded-xl"
+  const buttonClassName = "rounded-lg"
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -156,7 +156,7 @@ export function IntakeForm({ onSubmit, isSubmitting }: IntakeFormProps) {
             <SelectTrigger id="destinations" className={buttonClassName}>
               <SelectValue placeholder="-- Select one --" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-lg">
               <SelectItem value="cruise">Cruise</SelectItem>
               <SelectItem value="city">City Adventure</SelectItem>
               <SelectItem value="beach">Beach & Resorts</SelectItem>
@@ -174,7 +174,7 @@ export function IntakeForm({ onSubmit, isSubmitting }: IntakeFormProps) {
             <SelectTrigger id="budget" className={buttonClassName}>
               <SelectValue placeholder="Select your budget range" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-lg">
               <SelectItem value="budget">Budget ($1,000 - $3,000)</SelectItem>
               <SelectItem value="moderate">Moderate ($3,000 - $7,000)</SelectItem>
               <SelectItem value="luxury">Luxury ($7,000 - $15,000)</SelectItem>

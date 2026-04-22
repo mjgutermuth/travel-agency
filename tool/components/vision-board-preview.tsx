@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import { X, MapPin, Sparkles, Heart, Compass, Sunset, Landmark, UtensilsCrossed, Users, User,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Waves, Bird,
-  Hotel, Castle, Home, Tent, Crown, Wallet } from "lucide-react"
+  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
+  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import type { Destination } from "@/lib/destinations"
@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils"
 import { TripSummary } from "@/components/trip-summary"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User, Sparkles,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Waves, Bird,
-  Hotel, Castle, Home, Tent, Crown, Wallet
+  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
+  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
+  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell
 }
 
 interface VisionBoardPreviewProps {

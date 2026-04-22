@@ -1,17 +1,17 @@
 "use client"
 
-import { 
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User, Sparkles,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Waves, Bird,
-  Hotel, Castle, Home, Tent, Crown, Wallet, Check
+import {
+  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
+  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
+  Hotel, Home, Tent, Crown, Wallet, Check, Ship, Dumbbell
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { vibes, vibeCategories, type Vibe } from "@/lib/vibes"
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User, Sparkles,
-  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Waves, Bird,
-  Hotel, Castle, Home, Tent, Crown, Wallet
+  Compass, Sunset, Heart, Landmark, UtensilsCrossed, Users, User,
+  Palmtree, Mountain, Building2, Flower2, Music, ShoppingBag, Bird,
+  Hotel, Home, Tent, Crown, Wallet, Ship, Dumbbell
 }
 
 interface VibeSelectorProps {

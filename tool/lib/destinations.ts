@@ -103,5 +103,13 @@ export const destinations: Destination[] = [
     description: "Volcanic landscapes, pristine beaches, and the spirit of aloha",
     imageUrl: "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80",
     region: "North America"
+  },
+  {
+    id: "turks-and-caicos",
+    name: "Turks & Caicos",
+    country: "Turks & Caicos Islands",
+    description: "Powder-white beaches, impossibly turquoise water, and some of the Caribbean's best snorkeling",
+    imageUrl: "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80",
+    region: "Caribbean"
   }
 ]
