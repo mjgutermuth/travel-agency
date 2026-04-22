@@ -131,22 +131,6 @@ export default function VisionBoardPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-10 space-y-16">
-        {/* Vision Board Preview */}
-        <section>
-          <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
-            Your Board
-          </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">MY VISION BOARD</h2>
-          <VisionBoardPreview
-            pinnedDestinations={pinnedDestinations}
-            uploadedImages={uploadedImages}
-            selectedVibes={selectedVibes}
-            onRemoveDestination={removeDestination}
-            onRemoveImage={removeImage}
-            onRemoveVibe={toggleVibe}
-          />
-        </section>
-
         {/* Vibe Selector */}
         <section>
           <VibeSelector selectedVibes={selectedVibes} onToggleVibe={toggleVibe} />
@@ -180,6 +164,22 @@ export default function VisionBoardPage() {
               />
             ))}
           </div>
+        </section>
+
+        {/* Vision Board Preview */}
+        <section>
+          <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
+            Your Board
+          </p>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">MY VISION BOARD</h2>
+          <VisionBoardPreview
+            pinnedDestinations={pinnedDestinations}
+            uploadedImages={uploadedImages}
+            selectedVibes={selectedVibes}
+            onRemoveDestination={removeDestination}
+            onRemoveImage={removeImage}
+            onRemoveVibe={toggleVibe}
+          />
         </section>
 
         {/* Intake Form */}
