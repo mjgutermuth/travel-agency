@@ -469,6 +469,11 @@ strong { font-weight: 700; }
   min-width: 70px;
 }
 
+.contact-links-group {
+  display: flex;
+  gap: 1rem;
+}
+
 /* Form */
 .contact-form {
   background: var(--bg-card);
