@@ -433,6 +433,75 @@ strong { font-weight: 700; }
   margin-bottom: 1.5rem;
 }
 
+/* ---- YOUTUBE ---- */
+.youtube-section {
+  background: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.btn-youtube {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #ff0000;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.9rem 2rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+}
+
+.btn-youtube:hover {
+  box-shadow: 0 6px 24px rgba(255, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.video-placeholder {
+  aspect-ratio: 16 / 9;
+  background: var(--bg-card);
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--text-muted);
+}
+
+.video-placeholder i {
+  font-size: 2rem;
+  color: rgba(255, 0, 0, 0.25);
+}
+
+.video-placeholder span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.video-embed {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+}
+
 /* ---- CONTACT ---- */
 .contact {
   padding: 6rem 0;
@@ -575,15 +644,15 @@ strong { font-weight: 700; }
 }
 
 .footer-social {
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 1.1rem;
   color: var(--magenta);
   display: flex;
   align-items: center;
-  gap: 0.4rem;
   transition: opacity 0.2s;
 }
 .footer-social:hover { opacity: 0.75; }
+.footer-yt { color: #ff0000; }
+.footer-personal { opacity: 0.45; }
 
 .contact-link {
   color: var(--magenta);
@@ -612,6 +681,10 @@ strong { font-weight: 700; }
 
   .dest-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
   }
 
   .contact-container {
