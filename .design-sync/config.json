@@ -1,0 +1,12 @@
+{
+  "projectId": "c3979871-1895-42bc-b149-95e8a0b1160c",
+  "pkg": "travel-vision-board",
+  "globalName": "WandDS",
+  "shape": "package",
+  "srcDir": "components/ui",
+  "tsconfig": "tsconfig.json",
+  "buildCmd": "npm --prefix tool run build",
+  "cssEntry": "styles-compiled.css",
+  "runtimeFontPrefixes": ["DM Sans", "Bebas Neue", "Geist Mono"],
+  "readmeHeader": ".design-sync/conventions.md"
+}
