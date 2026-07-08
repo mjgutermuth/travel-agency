@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
+import Script from "next/script"
 import { ArrowLeft, CheckCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,6 +12,8 @@ import { IntakeForm, type IntakeFormData } from "@/components/intake-form"
 import { VibeSelector } from "@/components/vibe-selector"
 import { destinations, type Destination } from "@/lib/destinations"
 import { vibes } from "@/lib/vibes"
+
+const CALENDLY_URL = "https://calendly.com/wanderling/intake"
 
 export default function VisionBoardPage() {
   const [pinnedDestinations, setPinnedDestinations] = useState<Destination[]>([])
@@ -95,21 +98,36 @@ export default function VisionBoardPage() {
 
   if (isSubmitted) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6">
+      <main className="min-h-screen flex flex-col items-center px-6 py-16 gap-6">
         <Card className="max-w-md w-full text-center shadow-lg rounded-2xl">
           <CardContent className="pt-10 pb-8">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-primary" />
             </div>
             <h1 className="font-display text-3xl text-foreground mb-2">VISION BOARD SUBMITTED!</h1>
-            <p className="text-muted-foreground mb-6">
-              Thank you for sharing your travel dreams with me. I&apos;ll be in touch soon to help make your vision a reality.
+            <p className="text-muted-foreground">
+              Thank you for sharing your travel dreams with me. Ready to talk it through? Grab a time below.
             </p>
-            <Button asChild>
-              <a href="https://wanderling.world">Return Home</a>
-            </Button>
           </CardContent>
         </Card>
+
+        <Card className="max-w-2xl w-full shadow-lg rounded-2xl overflow-hidden">
+          <CardHeader className="bg-secondary pb-6">
+            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground text-center">BOOK A CALL</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4 pb-4 px-2 sm:px-4">
+            <div
+              className="calendly-inline-widget"
+              data-url={CALENDLY_URL}
+              style={{ minWidth: "320px", height: "700px" }}
+            />
+            <Script src="https://assets.calendly.com/assets/external/widget.js" strategy="lazyOnload" />
+          </CardContent>
+        </Card>
+
+        <Button asChild variant="ghost">
+          <a href="https://wanderling.world">Return Home</a>
+        </Button>
       </main>
     )
   }
