@@ -31,7 +31,7 @@
       <p class="hero-eyebrow">// independent travel advisor</p>
       <h1 class="hero-headline">EVERY DESTINATION HAS A STORY.<br>GO DISCOVER IT.</h1>
       <p class="hero-sub">Wherever you want to go, I'll help you get there.</p>
-      <a href="#contact" class="btn btn-primary">Let's Plan Your Trip</a>
+      <a href="/planner/intake/" class="btn btn-primary">Let's Plan Your Trip</a>
       <a href="/planner/vision-board/" class="btn btn-secondary">Create Your Vision Board</a>
     </div>
   </section>
@@ -203,7 +203,7 @@
         <div class="section-label">// get in touch</div>
         <h2 class="section-title">Ready to Go?</h2>
         <p>Tell me about your dream trip, and I'll help make it a reality.</p>
-        <p>My services are <strong>free to you</strong>. I'm compensated by suppliers, so you get a dedicated advisor at no extra cost.</p>
+        <p>I charge a <strong>planning fee</strong> tailored to the scope of your trip, quoted upfront before we get started — no surprises.</p>
         <div class="contact-details">
           <div class="contact-item">
             <span class="contact-label">Advisor</span>
@@ -228,38 +228,18 @@
         </div>
       </div>
       <div class="contact-right">
-        <form class="contact-form" onsubmit="handleSubmit(event)">
-          <input type="hidden" name="access_key" value="4a225bc3-2f74-4246-a619-b8b53bb5e7d7" />
-          <div class="form-group">
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" placeholder="Jane Smith" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="jane@example.com" required />
-          </div>
-          <div class="form-group">
-            <label for="trip-type">Type of Trip</label>
-            <select id="trip-type" name="trip-type">
-              <option value="">— Select one —</option>
-              <option value="cruise">Cruise</option>
-              <option value="city">City Adventure</option>
-              <option value="beach">Beach / Resort</option>
-              <option value="allinclusive">All-Inclusive</option>
-              <option value="honeymoon">Honeymoon</option>
-              <option value="family">Family Trip</option>
-              <option value="group">Group Trip</option>
-              <option value="adventure">Adventure / Outdoors</option>
-              <option value="unsure">Not sure yet</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="message">Tell Me More</label>
-            <textarea id="message" name="message" rows="4" placeholder="Where have you always wanted to go? Any rough dates or budget? Dream big."></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary full-width">Send It</button>
-          <p id="form-success" class="form-success" style="display:none;">Message sent! I'll be in touch soon.</p>
-        </form>
+        <div class="contact-cta">
+          <h3 class="contact-cta-title">Let's Get on a Call</h3>
+          <p class="contact-cta-intro">Book a time that works for you and we'll talk through:</p>
+          <ul class="contact-cta-list">
+            <li>Where you're dreaming of going</li>
+            <li>Rough travel dates &amp; trip length</li>
+            <li>Who's coming with you</li>
+            <li>Whether it's your first time there</li>
+          </ul>
+          <p class="contact-cta-fee">A planning fee applies, scoped to your trip — I'll walk you through it once we connect.</p>
+          <a href="/planner/intake/" class="btn btn-primary full-width">Book Your Call</a>
+        </div>
       </div>
     </div>
   </section>

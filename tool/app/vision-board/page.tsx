@@ -106,7 +106,7 @@ export default function VisionBoardPage() {
               Thank you for sharing your travel dreams with me. I&apos;ll be in touch soon to help make your vision a reality.
             </p>
             <Button asChild>
-              <a href="https://travel.melindagutermuth.com">Return Home</a>
+              <a href="https://wanderling.world">Return Home</a>
             </Button>
           </CardContent>
         </Card>
@@ -120,7 +120,7 @@ export default function VisionBoardPage() {
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Button variant="ghost" asChild className="rounded-full">
-            <a href="https://travel.melindagutermuth.com">
+            <a href="https://wanderling.world">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </a>
