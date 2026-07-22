@@ -54,7 +54,7 @@ async function _fetchLocationCoords(location) {
 
         for (const searchTerm of searchTerms) {
             const response = await fetch(
-                `${GEOCODING_URL}?name=${encodeURIComponent(searchTerm)}&count=5&language=en&format=json`
+                `${GEOCODING_URL}?name=${encodeURIComponent(searchTerm)}&count=30&language=en&format=json`
             );
 
             if (!response.ok) continue;
