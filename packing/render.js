@@ -243,10 +243,44 @@ function getCityName(location) {
     return city;
 }
 
+// Builds a readable, ordered list of stops for the trip title, e.g. "Lisbon"
+// or "Miami → Nassau → Miami" — collapses consecutive repeats (same city
+// across several days) but keeps a round-trip's start/end distinct.
+function getDisplayCityName(location) {
+    return location.includes(',') ? location.split(',')[0].trim() : location.trim();
+}
+
+function getTripDestinationSummary(tripData) {
+    const stops = [];
+    tripData.days.forEach(day => {
+        const name = getDisplayCityName(day.location);
+        if (stops.length === 0 || stops[stops.length - 1] !== name) {
+            stops.push(name);
+        }
+    });
+    return stops.join(' → ');
+}
+
+function getTripTitle(tripData) {
+    const stops = [];
+    tripData.days.forEach(day => {
+        const name = getDisplayCityName(day.location);
+        if (stops.length === 0 || stops[stops.length - 1] !== name) {
+            stops.push(name);
+        }
+    });
+
+    if (stops.length === 1) return `Your ${stops[0]} Trip`;
+    if (stops.length === 2) return `Your ${stops[0]} & ${stops[1]} Trip`;
+    return `Your ${stops.join(' → ')} Trip`;
+}
+
 // Calendar rendering
 function renderCalendar(tripData) {
     const calendarGrid = document.getElementById('calendarGrid');
-    
+    const titleEl = document.getElementById('calendarTripTitle');
+    if (titleEl) titleEl.textContent = getTripTitle(tripData);
+
     // Create trip days map
     const tripDays = new Map();
     tripData.days.forEach(day => {
@@ -337,6 +371,12 @@ function renderWeatherSummary(tripData) {
     const highUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 6).length;
     const extremeUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 8).length;
     
+    const subtitleEl = document.getElementById('packingSubtitle');
+    if (subtitleEl) {
+        const destinations = getTripDestinationSummary(tripData);
+        subtitleEl.textContent = `Personalized recommendations for your ${destinations} trip, based on the weather forecast`;
+    }
+
     const summaryDiv = document.getElementById('weatherSummary');
     summaryDiv.innerHTML = `
         <h3>Trip Weather Overview</h3>

@@ -603,7 +603,7 @@ async function generateCalendar() {
 
     // Show loading
     document.getElementById('calendarSection').style.display = 'block';
-    document.getElementById('calendarGrid').innerHTML = '<div class="loading">Generating your calendar...</div>';
+    startLoadingMessages();
 
     try {
         const tripData = await generateTripData(segments);
@@ -617,12 +617,41 @@ async function generateCalendar() {
         }
         currentTripData = tripData;
 
+        stopLoadingMessages();
         renderCalendar(tripData);
         renderPackingSuggestions(tripData);
     } catch (error) {
         console.error('Error generating calendar:', error);
+        stopLoadingMessages();
         document.getElementById('calendarGrid').innerHTML = '<div class="loading">Error loading weather data. Please try again.</div>';
     }
+}
+
+const LOADING_MESSAGES = [
+    'Checking the skies over your destination...',
+    'Consulting the forecast...',
+    'Mapping out your days...',
+    'Packing your virtual suitcase...',
+    'Double-checking the weather...',
+];
+
+let loadingMessageInterval = null;
+
+function startLoadingMessages() {
+    const grid = document.getElementById('calendarGrid');
+    let i = 0;
+    grid.innerHTML = `<div class="loading">${LOADING_MESSAGES[0]}</div>`;
+    clearInterval(loadingMessageInterval);
+    loadingMessageInterval = setInterval(() => {
+        i = (i + 1) % LOADING_MESSAGES.length;
+        const loadingEl = grid.querySelector('.loading');
+        if (loadingEl) loadingEl.textContent = LOADING_MESSAGES[i];
+    }, 1400);
+}
+
+function stopLoadingMessages() {
+    clearInterval(loadingMessageInterval);
+    loadingMessageInterval = null;
 }
 
 async function generateTripData(segments) {
