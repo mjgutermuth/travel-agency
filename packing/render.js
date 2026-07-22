@@ -370,18 +370,21 @@ function renderCalendar(tripData) {
 
 // Weather summary rendering
 function renderWeatherSummary(tripData) {
-    const temps = tripData.days.map(d => d.weather.temp);
-    const uvLevels = tripData.days.map(d => d.weather.uvIndex || 0);
-    const humidityLevels = tripData.days.map(d => d.weather.humidity || 50);
-    const precipDays = tripData.days.filter(d => d.weather.precipitationChance > 25).length;
-    
+    // De-dup by date first — overlapping segments otherwise inflate the
+    // "X of Y days" counts below, same issue getUniqueDaysByDate exists to fix.
+    const days = getUniqueDaysByDate(tripData);
+    const temps = days.map(d => d.weather.temp);
+    const uvLevels = days.map(d => d.weather.uvIndex || 0);
+    const humidityLevels = days.map(d => d.weather.humidity || 50);
+    const precipDays = days.filter(d => d.weather.precipitationChance > 25).length;
+
     const minTemp = Math.min(...temps);
     const maxTemp = Math.max(...temps);
     const maxUV = Math.max(...uvLevels);
     const avgHumidity = Math.round(humidityLevels.reduce((a, b) => a + b, 0) / humidityLevels.length);
-    
-    const highUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 6).length;
-    const extremeUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 8).length;
+
+    const highUVDays = days.filter(d => (d.weather.uvIndex || 0) >= 6).length;
+    const extremeUVDays = days.filter(d => (d.weather.uvIndex || 0) >= 8).length;
     
     const subtitleEl = document.getElementById('packingSubtitle');
     if (subtitleEl) {
@@ -407,7 +410,7 @@ function renderWeatherSummary(tripData) {
             </div>
             <div class="stat-item">
                 <span class="stat-label">Rainy Days</span>
-                <span class="stat-value">${precipDays} of ${tripData.days.length} days</span>
+                <span class="stat-value">${precipDays} of ${days.length} days</span>
             </div>
             ${highUVDays > 0 ? `
             <div class="stat-item">
@@ -546,8 +549,12 @@ function renderDailyPlanner(tripData) {
     const content = document.getElementById('dailyPlannerContent');
     if (!content) return;
 
+    // Same de-dup as the calendar/trip title — otherwise an overlapping
+    // segment shows up as two rows (one per city) for the same date.
+    const days = getUniqueDaysByDate(tripData);
+
     let html = '';
-    tripData.days.forEach((day, i) => {
+    days.forEach((day, i) => {
         const dateStr = day.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
         const outfit = generateDailyOutfit(day.weather, i);
         const assessment = assessWeatherConditions(day.weather);

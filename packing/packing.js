@@ -1,9 +1,14 @@
 // Smart packing suggestions generator
 function generateSmartPackingCategories(tripData) {
-    const temps = tripData.days.map(d => d.weather.temp);
+    // Overlapping segments (e.g. a later stop added without shortening the
+    // previous one's end date) mean tripData.days can contain more than one
+    // entry for the same calendar date. De-dup the same way the calendar and
+    // trip title do, so day counts and per-day breakdowns don't double-count.
+    const days = getUniqueDaysByDate(tripData);
+    const temps = days.map(d => d.weather.temp);
     const minTemp = Math.min(...temps);
     const maxTemp = Math.max(...temps);
-    const tripLength = tripData.effectiveTripLength || tripData.days.length;
+    const tripLength = tripData.effectiveTripLength || days.length;
     
     // Get occasion data (defaults to empty if not provided)
     const occasions = tripData.occasions || {};
@@ -22,29 +27,29 @@ function generateSmartPackingCategories(tripData) {
     const casualDays = Math.max(0, tripLength - specialDays);
     
     // Detailed weather analysis
-    const uvLevels = tripData.days.map(d => d.weather.uvIndex || 0);
+    const uvLevels = days.map(d => d.weather.uvIndex || 0);
     const maxUV = Math.max(...uvLevels);
-    const highUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 6).length;
-    const extremeUVDays = tripData.days.filter(d => (d.weather.uvIndex || 0) >= 8).length;
+    const highUVDays = days.filter(d => (d.weather.uvIndex || 0) >= 6).length;
+    const extremeUVDays = days.filter(d => (d.weather.uvIndex || 0) >= 8).length;
     
-    const humidityLevels = tripData.days.map(d => d.weather.humidity || 50);
+    const humidityLevels = days.map(d => d.weather.humidity || 50);
     const avgHumidity = humidityLevels.reduce((a, b) => a + b, 0) / humidityLevels.length;
-    const highHumidityDays = tripData.days.filter(d => (d.weather.humidity || 50) > 75).length;
+    const highHumidityDays = days.filter(d => (d.weather.humidity || 50) > 75).length;
     
-    const rainDays = tripData.days.filter(d => d.weather.precipitationChance > 30).length;
-    const heavyRainDays = tripData.days.filter(d => d.weather.precipitationChance > 70).length;
+    const rainDays = days.filter(d => d.weather.precipitationChance > 30).length;
+    const heavyRainDays = days.filter(d => d.weather.precipitationChance > 70).length;
     
-    const hotDays = tripData.days.filter(d => d.weather.temp >= 28).length;
-    const veryHotDays = tripData.days.filter(d => d.weather.temp >= 32).length;
-    const coldDays = tripData.days.filter(d => d.weather.temp <= 10).length;
-    const freezingDays = tripData.days.filter(d => d.weather.temp <= 0).length;
-    const snowDays = tripData.days.filter(d => d.weather.condition.includes('snow')).length;
-    const swimWeatherDays = tripData.days.filter(d => d.weather.temp >= 24).length;
+    const hotDays = days.filter(d => d.weather.temp >= 28).length;
+    const veryHotDays = days.filter(d => d.weather.temp >= 32).length;
+    const coldDays = days.filter(d => d.weather.temp <= 10).length;
+    const freezingDays = days.filter(d => d.weather.temp <= 0).length;
+    const snowDays = days.filter(d => d.weather.condition.includes('snow')).length;
+    const swimWeatherDays = days.filter(d => d.weather.temp >= 24).length;
 
-    const elevations = tripData.days.map(d => d.weather.elevation || 0);
+    const elevations = days.map(d => d.weather.elevation || 0);
     const maxElevation = Math.max(...elevations);
-    const highAltitudeDays = tripData.days.filter(d => (d.weather.elevation || 0) >= 1500).length;
-    const veryHighAltitudeDays = tripData.days.filter(d => (d.weather.elevation || 0) >= 2500).length;
+    const highAltitudeDays = days.filter(d => (d.weather.elevation || 0) >= 1500).length;
+    const veryHighAltitudeDays = days.filter(d => (d.weather.elevation || 0) >= 2500).length;
     
     const categories = {};
 
