@@ -423,10 +423,32 @@ function addTripSegment() {
             </div>
         `;
     }
-    
+
     additionalSegments.appendChild(segmentDiv);
     const locationInput = segmentDiv.querySelector('.segment-location');
     if (locationInput) attachLocationValidation(locationInput);
+
+    // Continue the itinerary: default a new leg's start date to where the
+    // previous one left off, so you're not re-typing a date you just entered.
+    if (!cruiseMode) {
+        const startDateInput = segmentDiv.querySelector('.segment-start-date');
+        if (startDateInput) {
+            const previousEndDate = getPreviousSegmentEndDate(segmentDiv);
+            if (previousEndDate) startDateInput.value = previousEndDate;
+        }
+    }
+}
+
+// Finds the end date to continue from: the segment just before this one in
+// #additionalSegments, or the main trip's end date if this is the first leg.
+function getPreviousSegmentEndDate(currentSegmentDiv) {
+    const previousSegment = currentSegmentDiv.previousElementSibling;
+    if (previousSegment && previousSegment.classList.contains('segment')) {
+        const prevEndInput = previousSegment.querySelector('.segment-end-date');
+        if (prevEndInput && prevEndInput.value) return prevEndInput.value;
+    }
+    const mainEndDate = document.getElementById('endDate');
+    return mainEndDate ? mainEndDate.value : '';
 }
 
 function removeSegment(segmentId) {
