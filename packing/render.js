@@ -250,26 +250,38 @@ function getDisplayCityName(location) {
     return location.includes(',') ? location.split(',')[0].trim() : location.trim();
 }
 
-function getTripDestinationSummary(tripData) {
-    const stops = [];
+// Matches renderCalendar's own de-dup: when segments' date ranges overlap,
+// only one location "wins" per calendar day (last one in the sorted array),
+// same as what actually shows on the calendar. Building the title from the
+// raw, non-deduplicated day list let overlapping segments produce a
+// nonsensical back-and-forth title even though the calendar itself looked
+// fine.
+function getUniqueDaysByDate(tripData) {
+    const byDate = new Map();
     tripData.days.forEach(day => {
+        const dateKey = day.date.toISOString().split('T')[0];
+        byDate.set(dateKey, day);
+    });
+    return Array.from(byDate.values()).sort((a, b) => a.date - b.date);
+}
+
+function getStopSequence(tripData) {
+    const stops = [];
+    getUniqueDaysByDate(tripData).forEach(day => {
         const name = getDisplayCityName(day.location);
         if (stops.length === 0 || stops[stops.length - 1] !== name) {
             stops.push(name);
         }
     });
-    return stops.join(' → ');
+    return stops;
+}
+
+function getTripDestinationSummary(tripData) {
+    return getStopSequence(tripData).join(' → ');
 }
 
 function getTripTitle(tripData) {
-    const stops = [];
-    tripData.days.forEach(day => {
-        const name = getDisplayCityName(day.location);
-        if (stops.length === 0 || stops[stops.length - 1] !== name) {
-            stops.push(name);
-        }
-    });
-
+    const stops = getStopSequence(tripData);
     if (stops.length === 1) return `Your ${stops[0]} Trip`;
     if (stops.length === 2) return `Your ${stops[0]} & ${stops[1]} Trip`;
     return `Your ${stops.join(' → ')} Trip`;

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applyUrlPrefill();
 });
 
-// Pre-fill from a shared client link, e.g. ?start=2026-08-01&end=2026-08-10&location=Rome
+// Pre-fill from a shared trip link, e.g. ?start=2026-08-01&end=2026-08-10&location=Rome
 // or a cruise link, e.g. ?mode=cruise&embark=2026-08-01&nights=7&location=Miami&ports=[...]
 function applyUrlPrefill() {
     const params = new URLSearchParams(window.location.search);
@@ -90,7 +90,7 @@ function applyCruiseUrlPrefill(params) {
                 }
             });
         } catch (e) {
-            console.error('Could not parse ports from client link:', e);
+            console.error('Could not parse ports from trip link:', e);
         }
     }
 
@@ -108,16 +108,16 @@ function applyCruiseUrlPrefill(params) {
 }
 
 // Build a shareable link pre-filled with the current trip details
-function copyClientLink() {
+function copyTripLink() {
     const statusEl = document.getElementById('shareLinkStatus');
     if (cruiseMode) {
-        copyCruiseClientLink(statusEl);
+        copyCruiseTripLink(statusEl);
     } else {
-        copyStandardClientLink(statusEl);
+        copyStandardTripLink(statusEl);
     }
 }
 
-function copyStandardClientLink(statusEl) {
+function copyStandardTripLink(statusEl) {
     const start = document.getElementById('startDate').value;
     const end = document.getElementById('endDate').value;
     const location = document.getElementById('location').value.trim();
@@ -136,7 +136,7 @@ function copyStandardClientLink(statusEl) {
     copyUrlToClipboard(url, statusEl);
 }
 
-function copyCruiseClientLink(statusEl) {
+function copyCruiseTripLink(statusEl) {
     const embark = document.getElementById('embarkationDate').value;
     const nights = document.getElementById('cruiseNights').value;
     const location = document.getElementById('location').value.trim();
@@ -182,7 +182,7 @@ function copyUrlToClipboard(url, statusEl) {
     const shareUrl = url.toString();
 
     const showCopied = () => {
-        statusEl.textContent = 'Link copied — paste it in your email to the client.';
+        statusEl.textContent = 'Link copied — save it or share it with your tripmates.';
         setTimeout(() => { statusEl.textContent = ''; }, 5000);
     };
 

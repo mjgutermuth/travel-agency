@@ -109,6 +109,20 @@ async function getCurrentWeather(coords, targetDate) {
         const target = new Date(targetDate).toISOString().split('T')[0];
         const dayIndex = data.daily.time.findIndex(date => date === target);
 
+        // Open-Meteo sometimes returns null max/min/weathercode for the last
+        // day or two of its 16-day window (the model hasn't finished
+        // computing that far out yet). Left unhandled, `(null + null) / 2`
+        // silently evaluates to 0°C — a fake-but-plausible-looking 32°F.
+        // Treat it the same as a date genuinely beyond the forecast window.
+        const hasCompleteData = dayIndex >= 0
+            && data.daily.temperature_2m_max[dayIndex] != null
+            && data.daily.temperature_2m_min[dayIndex] != null
+            && data.daily.weathercode[dayIndex] != null;
+
+        if (!hasCompleteData && dayIndex >= 0) {
+            return getClimateEstimate(coords, targetDate);
+        }
+
         if (dayIndex >= 0) {
             const hourStart = dayIndex * 24;
             const hourlyValues = data.hourly.relative_humidity_2m
