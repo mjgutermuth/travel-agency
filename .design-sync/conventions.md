@@ -123,3 +123,34 @@ background: linear-gradient(135deg, var(--magenta), var(--purple), var(--teal));
 --text: #1a1a2e;
 --text-muted: #6c757d;
 ```
+
+## 7. Locally-installed brand fonts — set these even though Claude Design can't render them
+
+Claude Design's own preview has no access to Adobe Fonts/Typekit, so it will always
+show the Georgia/sans-serif fallback no matter what — that's expected, not a bug to
+fix here. But any generated document is a plain HTML file that gets **downloaded and
+opened locally**, where the real fonts (synced via Adobe Creative Cloud) already
+exist as system fonts. Write the exact family names into the CSS custom properties
+so the downloaded file picks them up immediately with zero manual editing:
+
+```css
+--font-sans: 'Avenir Next', sans-serif;
+--font-display: 'Benguiat Pro ITC', Georgia, serif;
+```
+
+Set these once (e.g. on the outermost wrapper element) rather than repeating the
+literal names at every `var(--font-display, ...)` / `var(--font-sans, ...)` call
+site — custom properties inherit, so one declaration covers the whole document.
+
+Caveats:
+- `'Avenir Next'` (no "LT Pro") is correct — that's Apple's bundled system font,
+  which is the same family lineage as the site's licensed "Avenir Next LT Pro" and
+  renders effectively identically. Do not write "Avenir Next LT Pro" — that exact
+  name isn't installed and won't match.
+- Only **Benguiat Pro ITC Bold Condensed** is currently activated locally (no
+  Book/Medium/Regular weight). Bold display headlines are fine; anything wanting a
+  lighter or non-condensed display weight will silently fall back to Georgia until
+  more styles are activated in Creative Cloud.
+- When quoting these inside a JSON-embedded template (e.g. a bundler's
+  `__bundler/template` script content), use plain apostrophes — `\'` is not a valid
+  JSON escape sequence and will corrupt the file.
