@@ -93,7 +93,7 @@ export function VisionBoardPreview({
     ...selectedVibeObjects.map(v => ({
       type: "vibe" as const,
       id: v.id,
-      imageUrl: v.fallbackImageUrl,
+      imageUrl: v.fallbackImages[0].url,
       label: v.name,
       sublabel: categoryLabels[v.category] ?? v.category,
     })),

@@ -1,41 +1,53 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getRandomPhotos, type ResolvedImage, type UnsplashPhoto } from "@/lib/unsplash"
 
-// How many candidate photos to fetch per card/tile on mount. Shuffling
-// cycles within this already-fetched batch rather than hitting the API
-// again on every click, to limit Unsplash rate-limit usage.
+// How many live photos to fetch from Unsplash the first time someone
+// shuffles. Subsequent shuffles cycle within this batch — no live fetch
+// happens until a person actually clicks shuffle, and never more than once
+// per card per session, regardless of how many times they click after that.
 const BATCH_SIZE = 4
 
-export function usePhotoCycle(query: string, fallbackUrl: string) {
-  const [photos, setPhotos] = useState<UnsplashPhoto[]>([])
+function pickDifferentIndex(poolLength: number, current: number) {
+  if (poolLength <= 1) return current
+  let next = current
+  while (next === current) next = Math.floor(Math.random() * poolLength)
+  return next
+}
+
+export function usePhotoCycle(query: string, fallbackImages: ResolvedImage[]) {
+  // Index 0 on first render (server and client agree — avoids a hydration
+  // mismatch), then randomized client-side only, after mount.
   const [index, setIndex] = useState(0)
+  // null = live batch never attempted yet; [] = attempted and came up empty
+  const [liveBatch, setLiveBatch] = useState<UnsplashPhoto[] | null>(null)
+  const fetchingRef = useRef(false)
 
   useEffect(() => {
-    let cancelled = false
+    setIndex(Math.floor(Math.random() * fallbackImages.length))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    getRandomPhotos(query, BATCH_SIZE).then((result) => {
-      if (cancelled || result.length === 0) return
-      setPhotos(result)
-      setIndex(Math.floor(Math.random() * result.length)) // randomize on load
-    })
+  const pool: ResolvedImage[] = liveBatch ? [...fallbackImages, ...liveBatch] : fallbackImages
+  const currentImage = pool[index] ?? fallbackImages[0]
+  const canShuffle = liveBatch === null || pool.length > 1
 
-    return () => {
-      cancelled = true
+  const shuffle = async () => {
+    if (fetchingRef.current) return
+
+    if (liveBatch === null) {
+      fetchingRef.current = true
+      const result = await getRandomPhotos(query, BATCH_SIZE)
+      fetchingRef.current = false
+      setLiveBatch(result)
+      const newPool = [...fallbackImages, ...result]
+      setIndex(pickDifferentIndex(newPool.length, index))
+      return
     }
-  }, [query])
 
-  const currentImage: ResolvedImage = photos.length > 0 ? photos[index] : { url: fallbackUrl }
-
-  const shuffle = () => {
-    if (photos.length <= 1) return
-    setIndex((prev) => {
-      let next = prev
-      while (next === prev) next = Math.floor(Math.random() * photos.length)
-      return next
-    })
+    setIndex((prev) => pickDifferentIndex(pool.length, prev))
   }
 
-  return { currentImage, shuffle, canShuffle: photos.length > 1 }
+  return { currentImage, shuffle, canShuffle }
 }

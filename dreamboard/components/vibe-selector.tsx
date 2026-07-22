@@ -16,7 +16,7 @@ function VibeCard({ vibe, isSelected, onToggle }: {
   isSelected: boolean
   onToggle: () => void
 }) {
-  const { currentImage, shuffle, canShuffle } = usePhotoCycle(vibe.imageQuery, vibe.fallbackImageUrl)
+  const { currentImage, shuffle, canShuffle } = usePhotoCycle(vibe.imageQuery, vibe.fallbackImages)
 
   const handleShuffle = (e: React.MouseEvent) => {
     e.stopPropagation()

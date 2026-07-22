@@ -16,7 +16,7 @@ interface DestinationCardProps {
 }
 
 export function DestinationCard({ destination, isPinned, onTogglePin }: DestinationCardProps) {
-  const { currentImage, shuffle, canShuffle } = usePhotoCycle(destination.imageQuery, destination.fallbackImageUrl)
+  const { currentImage, shuffle, canShuffle } = usePhotoCycle(destination.imageQuery, destination.fallbackImages)
 
   const handleShuffle = (e: React.MouseEvent) => {
     e.stopPropagation()

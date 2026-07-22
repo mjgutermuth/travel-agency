@@ -6,7 +6,7 @@ export interface Destination {
   country: string
   description: string
   imageQuery: string
-  fallbackImageUrl: string
+  fallbackImages: ResolvedImage[]
   region: string
 }
 
@@ -16,172 +16,22 @@ export interface Destination {
 export type PinnedDestination = Destination & { image: ResolvedImage }
 
 export const destinations: Destination[] = [
-  // Row 1 — high visual impact openers
-  {
-    id: "tokyo",
-    name: "Tokyo",
-    country: "Japan",
-    description: "Electric energy meets ancient tradition in one of the world's most extraordinary cities",
-    imageQuery: "Tokyo Japan skyline",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
-    region: "Asia"
-  },
-  {
-    id: "santorini",
-    name: "Santorini",
-    country: "Greece",
-    description: "Iconic white-washed buildings perched on dramatic cliffs overlooking the Aegean Sea",
-    imageQuery: "Santorini Greece",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80",
-    region: "Europe"
-  },
-  {
-    id: "bali",
-    name: "Bali",
-    country: "Indonesia",
-    description: "Lush rice terraces, ancient temples, and pristine beaches in a tropical paradise",
-    imageQuery: "Bali Indonesia rice terrace",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
-    region: "Asia"
-  },
-  // Row 2 — bucket-list adventures
-  {
-    id: "machu-picchu",
-    name: "Machu Picchu",
-    country: "Peru",
-    description: "The mystical lost city of the Incas high in the Andes mountains",
-    imageQuery: "Machu Picchu Peru",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800&q=80",
-    region: "South America"
-  },
-  {
-    id: "new-zealand",
-    name: "New Zealand",
-    country: "New Zealand",
-    description: "Stunning fjords, mountains, and adventure in Middle-earth",
-    imageQuery: "New Zealand fjord mountains",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1469521669194-babb45599def?w=800&q=80",
-    region: "Oceania"
-  },
-  {
-    id: "morocco",
-    name: "Marrakech",
-    country: "Morocco",
-    description: "Vibrant souks, stunning riads, and the magic of North Africa",
-    imageQuery: "Marrakech Morocco",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80",
-    region: "Africa"
-  },
-  // Row 3 — stunning scenery
-  {
-    id: "amalfi",
-    name: "Amalfi Coast",
-    country: "Italy",
-    description: "Colorful cliffside villages, crystal-clear waters, and world-renowned cuisine",
-    imageQuery: "Amalfi Coast Italy",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=800&q=80",
-    region: "Europe"
-  },
-  {
-    id: "iceland",
-    name: "Iceland",
-    country: "Iceland",
-    description: "Northern lights, glaciers, hot springs, and otherworldly landscapes",
-    imageQuery: "Iceland landscape",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=800&q=80",
-    region: "Europe"
-  },
-  {
-    id: "safari",
-    name: "Serengeti Safari",
-    country: "Tanzania",
-    description: "Witness the great migration and Africa's most incredible wildlife",
-    imageQuery: "Serengeti Tanzania safari",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
-    region: "Africa"
-  },
-  // Row 4 — her expertise + classics
-  {
-    id: "ireland",
-    name: "Ireland",
-    country: "Ireland",
-    description: "Emerald coastlines, ancient castles, and the warmest welcome in Europe",
-    imageQuery: "Ireland coastline castle",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1564959130747-897fb406b9af?w=800&q=80",
-    region: "Europe"
-  },
-  {
-    id: "vienna",
-    name: "Vienna",
-    country: "Austria",
-    description: "Imperial palaces, grand coffee houses, and the city that gave the world classical music",
-    imageQuery: "Vienna Austria",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&q=80",
-    region: "Europe"
-  },
-  {
-    id: "paris",
-    name: "Paris",
-    country: "France",
-    description: "The City of Light awaits with art, cuisine, and timeless romance",
-    imageQuery: "Paris France",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80",
-    region: "Europe"
-  },
-  // Row 5 — nature & beach
-  {
-    id: "maldives",
-    name: "Maldives",
-    country: "Maldives",
-    description: "Overwater villas, turquoise lagoons, and some of the world's best diving",
-    imageQuery: "Maldives overwater bungalow",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80",
-    region: "Asia"
-  },
-  {
-    id: "banff",
-    name: "Banff",
-    country: "Canada",
-    description: "Turquoise glacier lakes, dramatic mountain peaks, and wildlife around every bend",
-    imageQuery: "Banff Canada lake mountains",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
-    region: "North America"
-  },
-  {
-    id: "hawaii",
-    name: "Hawaii",
-    country: "USA",
-    description: "Volcanic landscapes, pristine beaches, and the spirit of aloha",
-    imageQuery: "Hawaii beach volcano",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80",
-    region: "North America"
-  },
-  // Row 6 — Caribbean & domestic
-  {
-    id: "turks-and-caicos",
-    name: "Turks & Caicos",
-    country: "Turks & Caicos Islands",
-    description: "Powder-white beaches, impossibly turquoise water, and some of the Caribbean's best snorkeling",
-    imageQuery: "Turks and Caicos beach",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80",
-    region: "Caribbean"
-  },
-  {
-    id: "east-coast-usa",
-    name: "East Coast, USA",
-    country: "USA",
-    description: "From the rocky shores of New England to the streets of New York and the charm of the South",
-    imageQuery: "New England coast lighthouse",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80",
-    region: "North America"
-  },
-  {
-    id: "west-coast-usa",
-    name: "West Coast, USA",
-    country: "USA",
-    description: "Pacific coastlines, California sunshine, towering redwoods, and the spirit of the open road",
-    imageQuery: "California coast highway",
-    fallbackImageUrl: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80",
-    region: "North America"
-  }
+  { id: "tokyo", name: "Tokyo", country: "Japan", description: "Electric energy meets ancient tradition in one of the world's most extraordinary cities", imageQuery: "Tokyo Japan skyline", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1606044466411-207a9a49711f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Marek Okon', photographerUrl: 'https://unsplash.com/@marekokon' }, { url: 'https://images.unsplash.com/photo-1699444117374-9c4f9c85c6f2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Siborey Sean', photographerUrl: 'https://unsplash.com/@siborey' }], region: "Asia" },
+  { id: "santorini", name: "Santorini", country: "Greece", description: "Iconic white-washed buildings perched on dramatic cliffs overlooking the Aegean Sea", imageQuery: "Santorini Greece", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1615015456178-ae6bb600b7ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'joel protasio', photographerUrl: 'https://unsplash.com/@jmp_travel' }, { url: 'https://images.unsplash.com/photo-1693775253507-8006182d3c88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Michael Mitrakos', photographerUrl: 'https://unsplash.com/@mitrakos' }], region: "Europe" },
+  { id: "bali", name: "Bali", country: "Indonesia", description: "Lush rice terraces, ancient temples, and pristine beaches in a tropical paradise", imageQuery: "Bali Indonesia rice terrace", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1508178066614-b16ebcb84c00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Patrick Craig', photographerUrl: 'https://unsplash.com/@experientialist' }, { url: 'https://images.unsplash.com/photo-1711948699135-779c6ba1f805?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Michaela Římáková', photographerUrl: 'https://unsplash.com/@michaelarimakova' }], region: "Asia" },
+  { id: "machu-picchu", name: "Machu Picchu", country: "Peru", description: "The mystical lost city of the Incas high in the Andes mountains", imageQuery: "Machu Picchu Peru", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1609922565804-e563a9968796?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Federico Scarionati', photographerUrl: 'https://unsplash.com/@federicoscarionati' }, { url: 'https://images.unsplash.com/photo-1669225878339-69539a4fa33a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'James Cummings', photographerUrl: 'https://unsplash.com/@jgc_p' }], region: "South America" },
+  { id: "new-zealand", name: "New Zealand", country: "New Zealand", description: "Stunning fjords, mountains, and adventure in Middle-earth", imageQuery: "New Zealand fjord mountains", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1469521669194-babb45599def?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1577375994507-2f5e4a725ac9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Pakata Goh', photographerUrl: 'https://unsplash.com/@pakata' }, { url: 'https://images.unsplash.com/photo-1750088012260-72c66957fb7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMyfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Andréa Villiers', photographerUrl: 'https://unsplash.com/@lemondeavecandrea' }], region: "Oceania" },
+  { id: "morocco", name: "Marrakech", country: "Morocco", description: "Vibrant souks, stunning riads, and the magic of North Africa", imageQuery: "Marrakech Morocco", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1714576578629-6cf5459bcaf1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Liubov Novikova', photographerUrl: 'https://unsplash.com/@lub_angeles' }, { url: 'https://images.unsplash.com/photo-1716146755954-4f197a5b6031?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Jeslyn Xie', photographerUrl: 'https://unsplash.com/@jeslynnn7' }], region: "Africa" },
+  { id: "amalfi", name: "Amalfi Coast", country: "Italy", description: "Colorful cliffside villages, crystal-clear waters, and world-renowned cuisine", imageQuery: "Amalfi Coast Italy", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1633321088718-e25b82a8df4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Simon Nham', photographerUrl: 'https://unsplash.com/@simonsez' }, { url: 'https://images.unsplash.com/photo-1710443199782-2656cebf21a4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Mihaela Claudia Puscas', photographerUrl: 'https://unsplash.com/@mihaela_claudia_p' }], region: "Europe" },
+  { id: "iceland", name: "Iceland", country: "Iceland", description: "Northern lights, glaciers, hot springs, and otherworldly landscapes", imageQuery: "Iceland landscape", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1503993656770-0479a287559e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Geoffrey Lucas', photographerUrl: 'https://unsplash.com/@i_caring' }, { url: 'https://images.unsplash.com/photo-1572649171004-da199306b2e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Nina Luong', photographerUrl: 'https://unsplash.com/@ninaluong' }], region: "Europe" },
+  { id: "safari", name: "Serengeti Safari", country: "Tanzania", description: "Witness the great migration and Africa's most incredible wildlife", imageQuery: "Serengeti Tanzania safari", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1635327351177-26215a82a4a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Valeria Rossi', photographerUrl: 'https://unsplash.com/@valeriarossi96' }, { url: 'https://images.unsplash.com/photo-1759329234673-af6cab59e78d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Pascal Gambin', photographerUrl: 'https://unsplash.com/@pascal_gambin' }], region: "Africa" },
+  { id: "ireland", name: "Ireland", country: "Ireland", description: "Emerald coastlines, ancient castles, and the warmest welcome in Europe", imageQuery: "Ireland coastline castle", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1564959130747-897fb406b9af?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1629274747234-3607bb8b8334?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'K. Mitch Hodge', photographerUrl: 'https://unsplash.com/@kmitchhodge' }, { url: 'https://images.unsplash.com/photo-1722702750485-bdb8c41175b9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Eileen Photography', photographerUrl: 'https://unsplash.com/@eileenphotography' }], region: "Europe" },
+  { id: "vienna", name: "Vienna", country: "Austria", description: "Imperial palaces, grand coffee houses, and the city that gave the world classical music", imageQuery: "Vienna Austria", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1688496912344-9fb56a708f3d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Cullen Carter', photographerUrl: 'https://unsplash.com/@caseshots' }, { url: 'https://images.unsplash.com/photo-1707998985894-582f85753753?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Joshi Milestoner', photographerUrl: 'https://unsplash.com/@joshimilestoner' }], region: "Europe" },
+  { id: "paris", name: "Paris", country: "France", description: "The City of Light awaits with art, cuisine, and timeless romance", imageQuery: "Paris France", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Gloria Villa', photographerUrl: 'https://unsplash.com/@villagloria' }, { url: 'https://images.unsplash.com/photo-1624209060513-2b1b76ed0caa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Bastien Nvs', photographerUrl: 'https://unsplash.com/@bastien_nvs' }], region: "Europe" },
+  { id: "maldives", name: "Maldives", country: "Maldives", description: "Overwater villas, turquoise lagoons, and some of the world's best diving", imageQuery: "Maldives overwater bungalow", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1577457947779-ea6e2544a419?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Tanja Cotoaga', photographerUrl: 'https://unsplash.com/@tarafuco' }, { url: 'https://images.unsplash.com/photo-1692417045423-48f9ac5a57e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTMzfA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Meg von Haartman', photographerUrl: 'https://unsplash.com/@traveleroohlala' }], region: "Asia" },
+  { id: "banff", name: "Banff", country: "Canada", description: "Turquoise glacier lakes, dramatic mountain peaks, and wildlife around every bend", imageQuery: "Banff Canada lake mountains", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1671073621181-c957229b2382?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Cora Leach', photographerUrl: 'https://unsplash.com/@coramaureen' }, { url: 'https://images.unsplash.com/photo-1713992755555-6a261dddd12a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Nunzio Guerrera', photographerUrl: 'https://unsplash.com/@nunzg' }], region: "North America" },
+  { id: "hawaii", name: "Hawaii", country: "USA", description: "Volcanic landscapes, pristine beaches, and the spirit of aloha", imageQuery: "Hawaii beach volcano", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1696919424559-e835b3c10dbe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Leo_Visions', photographerUrl: 'https://unsplash.com/@leo_visions_' }, { url: 'https://images.unsplash.com/photo-1705418792722-6b7205628fa6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Kush Dwivedi', photographerUrl: 'https://unsplash.com/@sleepless_explorer' }], region: "North America" },
+  { id: "turks-and-caicos", name: "Turks & Caicos", country: "Turks & Caicos Islands", description: "Powder-white beaches, impossibly turquoise water, and some of the Caribbean's best snorkeling", imageQuery: "Turks and Caicos beach", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1548574505-5e239809ee19?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1608956905586-adaad6346779?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Cassie Gallegos', photographerUrl: 'https://unsplash.com/@theadventurebitch' }, { url: 'https://images.unsplash.com/photo-1762858577529-63346865eb41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Marc Snailum', photographerUrl: 'https://unsplash.com/@snailumm' }], region: "Caribbean" },
+  { id: "east-coast-usa", name: "East Coast, USA", country: "USA", description: "From the rocky shores of New England to the streets of New York and the charm of the South", imageQuery: "New England coast lighthouse", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1530123985359-4fd0cce1ea8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Mercedes Mehling', photographerUrl: 'https://unsplash.com/@mrs80z' }, { url: 'https://images.unsplash.com/photo-1711634744785-c4a13f8f8f9a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Carly Mackler', photographerUrl: 'https://unsplash.com/@carlymack' }], region: "North America" },
+  { id: "west-coast-usa", name: "West Coast, USA", country: "USA", description: "Pacific coastlines, California sunshine, towering redwoods, and the spirit of the open road", imageQuery: "California coast highway", fallbackImages: [{ url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800&q=80' }, { url: 'https://images.unsplash.com/photo-1625038389243-fe421255bbd4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Zetong Li', photographerUrl: 'https://unsplash.com/@zetong' }, { url: 'https://images.unsplash.com/photo-1707869342337-a40c547deb8b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDA0NDg3fDB8MXxyYW5kb218fHx8fHx8fHwxNzg0NzUxOTM0fA&ixlib=rb-4.1.0&q=80&w=1080', photographerName: 'Zoshua Colah', photographerUrl: 'https://unsplash.com/@zoshuacolah' }], region: "North America" },
 ]
