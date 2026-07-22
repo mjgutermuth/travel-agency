@@ -668,14 +668,77 @@ body {
 }
 
 .category-items li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
     margin-bottom: 6px;
 }
 
-.category-items li:before {
+.category-items li .item-text:before {
     content: "→ ";
     color: var(--teal);
     font-weight: bold;
     margin-right: 8px;
+}
+
+.item-remove-btn {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    color: #ccc;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.item-remove-btn:hover {
+    background: #fdecea;
+    color: #c0392b;
+}
+
+.add-item-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+}
+
+.add-item-input {
+    flex: 1;
+    padding: 0.5rem 0.7rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    background: var(--bg-card);
+}
+
+.add-item-input:focus {
+    outline: none;
+    border-color: var(--teal);
+}
+
+.add-item-btn {
+    flex-shrink: 0;
+    padding: 0.5rem 0.9rem;
+    border: 2px solid var(--teal);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--teal);
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    cursor: pointer;
+}
+
+.add-item-btn:hover {
+    background: rgba(78, 205, 196, 0.08);
 }
 
 .quantity-highlight {
@@ -969,6 +1032,10 @@ body {
 }
 
 .bag-items li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
     margin-bottom: 8px;
     border-bottom: 1px solid #f0f0f0;
     padding-bottom: 6px;
@@ -1079,6 +1146,10 @@ body {
     .quantity-highlight { background: none; font-weight: bold; color: #000; padding: 0; }
     .priority-high, .priority-medium { background: white !important; }
     .weather-summary { display: none; }
+
+    /* Editing controls are for curating the list beforehand, not for the
+       printed page itself. */
+    .item-remove-btn, .add-item-row { display: none !important; }
 
     /* Force the outfit-by-day list open — there's no "click to expand" on a
        printed page, so a collapsed section would just print as a dead bar. */

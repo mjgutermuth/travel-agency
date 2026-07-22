@@ -434,16 +434,51 @@ function toggleBagView() {
     renderPackingCategories();
 }
 
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Remove/add mutate _lastCategories directly so Category View, Bag View, and
+// Print all stay in sync with whatever's actually left on the list.
+function removePackingItem(categoryIndex, itemIndex) {
+    const category = Object.values(_lastCategories)[categoryIndex];
+    if (!category) return;
+    category.items.splice(itemIndex, 1);
+    renderPackingCategories();
+}
+
+function addCustomItem(categoryIndex, inputEl) {
+    const category = Object.values(_lastCategories)[categoryIndex];
+    if (!category) return;
+    const text = inputEl.value.trim();
+    if (!text) return;
+    category.items.push(escapeHtml(text));
+    inputEl.value = '';
+    renderPackingCategories();
+}
+
 function renderCategoryView(categories) {
     let html = '';
-    Object.entries(categories).forEach(([category, data]) => {
+    Object.entries(categories).forEach(([category, data], catIndex) => {
         const priorityClass = data.priority ? `priority-${data.priority}` : '';
         html += `
             <div class="packing-category ${priorityClass}">
                 <div class="category-title">${category}</div>
                 <ul class="category-items">
-                    ${data.items.map(item => `<li>${item}</li>`).join('')}
+                    ${data.items.map((item, itemIndex) => `
+                        <li>
+                            <span class="item-text">${item}</span>
+                            <button type="button" class="item-remove-btn" onclick="removePackingItem(${catIndex}, ${itemIndex})" aria-label="Remove item">×</button>
+                        </li>
+                    `).join('')}
                 </ul>
+                <div class="add-item-row">
+                    <input type="text" class="add-item-input" placeholder="Add an item..."
+                        onkeydown="if(event.key==='Enter'){event.preventDefault();addCustomItem(${catIndex}, this);}">
+                    <button type="button" class="add-item-btn" onclick="addCustomItem(${catIndex}, this.previousElementSibling)">+ Add</button>
+                </div>
             </div>
         `;
     });
@@ -454,12 +489,17 @@ function renderBagView(categories) {
     const carryOnItems = [];
     const checkedItems = [];
 
-    Object.entries(categories).forEach(([categoryName, data]) => {
-        data.items.forEach(item => {
+    Object.entries(categories).forEach(([categoryName, data], catIndex) => {
+        data.items.forEach((item, itemIndex) => {
             const stripped = item.replace(/<[^>]+>/g, '').trim();
             // Skip meta/summary lines
             if (!stripped || stripped.startsWith('(') || stripped.startsWith('See ') || stripped.startsWith('Trip breakdown') || stripped.startsWith('Destination reaches')) return;
-            const entry = `<li><span class="item-category">${categoryName}:</span> ${item}</li>`;
+            const entry = `
+                <li>
+                    <span class="item-text"><span class="item-category">${categoryName}:</span> ${item}</span>
+                    <button type="button" class="item-remove-btn" onclick="removePackingItem(${catIndex}, ${itemIndex})" aria-label="Remove item">×</button>
+                </li>
+            `;
             if (classifyItem(item) === 'checked') {
                 checkedItems.push(entry);
             } else {
