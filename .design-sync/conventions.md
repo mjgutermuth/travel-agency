@@ -89,3 +89,37 @@ function DestinationCard({ name, region, description }) {
 ```
 
 > **Font note**: `font-sans` maps to Avenir Next (Adobe Fonts/Typekit, loaded at runtime). `font-display` maps to ITC Benguiat (warm editorial serif, used for headlines/titles). Both are loaded via an Adobe Fonts kit link, not bundled — in Claude Design they fall back to `Georgia, serif`.
+
+## 6. Marketing-site background system — READ THIS for any document, page, or hero banner
+
+**The tokens in section 2 are for the `dreamboard` app's components only** (buttons,
+cards, form fields). They are a *different, narrower* palette from the main marketing
+site's own background system. If you are generating a document, landing page, hero
+banner, checklist, or anything meant to look like **wanderling.world itself** — not an
+in-app widget — use the values below instead of (or layered under) the section 2 token
+table. Do not substitute a plain two-stop pink→orange gradient; it is visibly wrong.
+
+**Full reference:** see `guidelines/BrandBackground.html` (visual swatch card, group
+"Brand" in this project) and `guidelines/brand-background.md` (exact CSS) for complete
+detail. Key values inline here so they aren't missed:
+
+```css
+/* Page/hero background — a 3-stop diagonal, NOT a 2-stop pink-to-orange gradient */
+--bg-gradient: linear-gradient(135deg, #fef6e4 0%, #fff1f8 50%, #e8f4f8 100%);
+
+/* Faint violet grid overlay on top of the gradient, always present in the hero */
+background-image:
+  linear-gradient(rgba(167, 139, 250, 0.06) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(167, 139, 250, 0.06) 1px, transparent 1px);
+background-size: 60px 60px;
+
+/* Logotype / headline accent gradient — three colors, not two */
+--magenta: #ff6b9d;
+--purple:  #a78bfa;
+--teal:    #4ecdc4;
+background: linear-gradient(135deg, var(--magenta), var(--purple), var(--teal));
+
+/* Body text colors on the marketing site (different from the app's near-black) */
+--text: #1a1a2e;
+--text-muted: #6c757d;
+```
