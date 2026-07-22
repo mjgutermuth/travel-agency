@@ -40,11 +40,12 @@ jobs:
 
       - name: Assemble site
         run: |
-          mkdir -p _site/tools
+          mkdir -p _site
           cp index.html style.css script.js CNAME .nojekyll _site/
-          cp -r packing _site/tools/packing
-          mkdir -p _site/tools/dreamboard
-          cp -r dreamboard/out/. _site/tools/dreamboard/
+          cp -r packing _site/packing
+          cp -r intake _site/intake
+          mkdir -p _site/dreamboard
+          cp -r dreamboard/out/. _site/dreamboard/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
