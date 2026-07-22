@@ -26,14 +26,14 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: tool/package-lock.json
+          cache-dependency-path: dreamboard/package-lock.json
 
       - name: Install vision board dependencies
-        working-directory: tool
+        working-directory: dreamboard
         run: npm ci
 
       - name: Build vision board
-        working-directory: tool
+        working-directory: dreamboard
         run: npm run build
 
       - name: Assemble site
@@ -42,7 +42,7 @@ jobs:
           cp index.html style.css script.js CNAME .nojekyll _site/
           cp -r packing _site/tools/packing
           mkdir -p _site/tools/dreamboard
-          cp -r tool/out/. _site/tools/dreamboard/
+          cp -r dreamboard/out/. _site/tools/dreamboard/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -12,8 +12,8 @@ No authored previews — all are floor cards ("preview not yet authored" placeho
 ## Known caveats
 
 ### CSS entry must be manually refreshed after `next build`
-`tool/styles-compiled.css` is a copy of the Next.js production CSS output. Its chunk
-filename changes after every `npm --prefix tool run build`. Next.js can emit more
+`dreamboard/styles-compiled.css` is a copy of the Next.js production CSS output. Its chunk
+filename changes after every `npm --prefix dreamboard run build`. Next.js can emit more
 than one CSS chunk (e.g. a tiny font-loader chunk alongside the real Tailwind
 bundle) — **pick the largest one, not the alphabetically-first one**. Sorting by
 name silently grabbed the ~2KB font chunk instead of the ~130KB main bundle for
@@ -22,11 +22,11 @@ this file only feeds the design sync, not the live site, so nothing user-facing
 broke). To refresh after a build:
 
 ```bash
-cp tool/.next/static/chunks/$(ls -S tool/.next/static/chunks/*.css | head -1 | xargs basename) tool/styles-compiled.css
+cp dreamboard/.next/static/chunks/$(ls -S dreamboard/.next/static/chunks/*.css | head -1 | xargs basename) dreamboard/styles-compiled.css
 ```
 
 Sanity-check afterward that it's actually the big one, e.g.
-`wc -c tool/styles-compiled.css` should read ~130KB+, not ~2KB. Then re-sync so
+`wc -c dreamboard/styles-compiled.css` should read ~130KB+, not ~2KB. Then re-sync so
 the updated CSS reaches Claude Design.
 
 ### Adobe Fonts (Typekit) not available in Claude Design
@@ -44,7 +44,7 @@ package-validate.mjs's FONT_MISSING check to treat these as expected-missing
 rather than warning.
 
 ### Tailwind CSS 4 `@import 'tailwindcss'` not esbuild-bundlable
-`tool/app/globals.css` uses the Tailwind CSS 4 `@import 'tailwindcss'` directive which
+`dreamboard/app/globals.css` uses the Tailwind CSS 4 `@import 'tailwindcss'` directive which
 requires the Tailwind compiler. The sync uses the pre-compiled output from the Next.js
 build instead. See the CSS entry note above.
 
@@ -60,7 +60,7 @@ directly — no pre-built dist entry needed, so `--entry` is omitted.
 ```bash
 node .ds-sync/resync.mjs \
   --config .design-sync/config.json \
-  --node-modules tool/node_modules \
+  --node-modules dreamboard/node_modules \
   --out ./ds-bundle \
   --remote <path to a locally-saved copy of the remote _ds_sync.json>
 ```

@@ -5,7 +5,7 @@
   "shape": "package",
   "srcDir": "components/ui",
   "tsconfig": "tsconfig.json",
-  "buildCmd": "npm --prefix tool run build",
+  "buildCmd": "npm --prefix dreamboard run build",
   "cssEntry": "styles-compiled.css",
   "runtimeFontPrefixes": ["avenir-next", "itc-benguiat", "Geist Mono"],
   "readmeHeader": ".design-sync/conventions.md"
