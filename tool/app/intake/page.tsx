@@ -19,7 +19,9 @@ export default function IntakePage() {
             </a>
           </Button>
           <span className="font-semibold text-foreground">Trip Intake</span>
-          <div className="w-[88px]" />
+          <span className="font-display text-sm tracking-wide bg-gradient-to-br from-[#ff6b9d] via-[#a78bfa] to-[#4ecdc4] bg-clip-text text-transparent">
+            WANDER/LING
+          </span>
         </div>
       </header>
 
@@ -45,7 +47,7 @@ export default function IntakePage() {
 
         <Card className="shadow-lg rounded-2xl overflow-hidden">
           <CardHeader className="bg-secondary pb-6">
-            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground">Book a Call</CardTitle>
+            <CardTitle className="font-display font-normal text-2xl sm:text-3xl text-foreground">Book a Call</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 pb-4 px-2 sm:px-4">
             <div

@@ -113,7 +113,7 @@ export default function VisionBoardPage() {
 
         <Card className="max-w-2xl w-full shadow-lg rounded-2xl overflow-hidden">
           <CardHeader className="bg-secondary pb-6">
-            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground text-center">Book a Call</CardTitle>
+            <CardTitle className="font-display font-normal text-2xl sm:text-3xl text-foreground text-center">Book a Call</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 pb-4 px-2 sm:px-4">
             <div
@@ -144,7 +144,9 @@ export default function VisionBoardPage() {
             </a>
           </Button>
           <span className="font-semibold text-foreground">Create Your Vision Board</span>
-          <div className="w-[88px]" />
+          <span className="font-display text-sm tracking-wide bg-gradient-to-br from-[#ff6b9d] via-[#a78bfa] to-[#4ecdc4] bg-clip-text text-transparent">
+            WANDER/LING
+          </span>
         </div>
       </header>
 
@@ -207,7 +209,7 @@ export default function VisionBoardPage() {
               <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
                 Get In Touch
               </p>
-              <CardTitle className="font-display text-3xl sm:text-4xl text-foreground">Ready to Go?</CardTitle>
+              <CardTitle className="font-display font-normal text-3xl sm:text-4xl text-foreground">Ready to Go?</CardTitle>
               <p className="text-muted-foreground">
                 Tell me about your dream trip and I&apos;ll help make it happen.
               </p>
