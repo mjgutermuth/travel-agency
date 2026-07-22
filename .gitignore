@@ -4,3 +4,6 @@ ds-bundle/
 .design-sync/.cache/
 .design-sync/learnings/
 .design-sync/node_modules
+
+# vision board static export — built and deployed by .github/workflows/deploy.yml
+/planner/

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
-  basePath: "/planner",
+  basePath: "/tools/dreamboard",
   trailingSlash: true,
   typescript: {
     ignoreBuildErrors: true,
