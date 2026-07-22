@@ -104,7 +104,7 @@ export default function VisionBoardPage() {
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="font-display text-3xl text-foreground mb-2">VISION BOARD SUBMITTED!</h1>
+            <h1 className="font-display text-3xl text-foreground mb-2">Vision Board Submitted!</h1>
             <p className="text-muted-foreground">
               Thank you for sharing your travel dreams with me. Ready to talk it through? Grab a time below.
             </p>
@@ -113,7 +113,7 @@ export default function VisionBoardPage() {
 
         <Card className="max-w-2xl w-full shadow-lg rounded-2xl overflow-hidden">
           <CardHeader className="bg-secondary pb-6">
-            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground text-center">BOOK A CALL</CardTitle>
+            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground text-center">Book a Call</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 pb-4 px-2 sm:px-4">
             <div
@@ -159,7 +159,7 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-accent uppercase mb-2">
             Personal Touch
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">UPLOAD YOUR INSPIRATION</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">Upload Your Inspiration</h2>
           <ImageUploader images={uploadedImages} onImagesChange={setUploadedImages} />
         </section>
 
@@ -168,7 +168,7 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-chart-3 uppercase mb-2">
             Browse & Pin
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">EXPLORE DESTINATIONS</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Explore Destinations</h2>
           <p className="text-muted-foreground mb-8">
             Click the heart on any destination to add it to your vision board
           </p>
@@ -189,7 +189,7 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
             Your Board
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">MY VISION BOARD</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">My Vision Board</h2>
           <VisionBoardPreview
             pinnedDestinations={pinnedDestinations}
             uploadedImages={uploadedImages}
@@ -207,7 +207,7 @@ export default function VisionBoardPage() {
               <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
                 Get In Touch
               </p>
-              <CardTitle className="font-display text-3xl sm:text-4xl text-foreground">READY TO GO?</CardTitle>
+              <CardTitle className="font-display text-3xl sm:text-4xl text-foreground">Ready to Go?</CardTitle>
               <p className="text-muted-foreground">
                 Tell me about your dream trip and I&apos;ll help make it happen.
               </p>

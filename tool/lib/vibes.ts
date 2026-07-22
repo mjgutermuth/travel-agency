@@ -41,17 +41,17 @@ export const vibes: Vibe[] = [
 
 export const vibeCategories = {
   style: {
-    title: "TRAVEL STYLE",
+    title: "Travel Style",
     subtitle: "How do you want to travel?",
     label: "Your Vibe"
   },
   activity: {
-    title: "ACTIVITIES",
+    title: "Activities",
     subtitle: "What do you want to do?",
     label: "Must-Dos"
   },
   accommodation: {
-    title: "ACCOMMODATION",
+    title: "Accommodation",
     subtitle: "Where do you want to stay?",
     label: "Your Stay"
   }

@@ -28,7 +28,7 @@ export default function IntakePage() {
           <p className="text-xs font-medium tracking-widest text-accent uppercase mb-2">
             Let&apos;s Talk Trip
           </p>
-          <h1 className="font-display text-4xl sm:text-5xl text-foreground mb-4">LET&apos;S PLAN YOUR TRIP</h1>
+          <h1 className="font-display text-4xl sm:text-5xl text-foreground mb-4">Let&apos;s Plan Your Trip</h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Grab a time on my calendar and I&apos;ll come prepared to talk through where you want to go, when, and with whom.
           </p>
@@ -45,7 +45,7 @@ export default function IntakePage() {
 
         <Card className="shadow-lg rounded-2xl overflow-hidden">
           <CardHeader className="bg-secondary pb-6">
-            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground">BOOK A CALL</CardTitle>
+            <CardTitle className="font-display text-2xl sm:text-3xl text-foreground">Book a Call</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 pb-4 px-2 sm:px-4">
             <div
