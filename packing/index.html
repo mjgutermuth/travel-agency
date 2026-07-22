@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Packing Assistant</title>
+    <link rel="stylesheet" href="https://use.typekit.net/vif2iuw.css">
+    <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="brand-mark">WANDER/LING</div>
+            <h1>Travel Packing Assistant</h1>
+            <p>Get smart, weather-based packing suggestions for your trip</p>
+        </div>
+        
+        <div class="trip-form">
+            <div class="mode-switcher">
+                <button id="standardModeBtn" class="mode-btn active" onclick="setCruiseMode(false)">Standard</button>
+                <button id="cruiseModeBtn" class="mode-btn" onclick="setCruiseMode(true)">🚢 Cruise</button>
+            </div>
+            <p class="cruise-note" id="cruiseNote" style="display:none;">Add each port of call below. Skip sea days — no weather or packing changes needed for days at sea.</p>
+
+            <div id="cruiseDateHeader" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="embarkationDate">Embarkation Date</label>
+                        <input type="date" id="embarkationDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="cruiseNights">Number of Nights</label>
+                        <input type="number" id="cruiseNights" min="1" max="30" placeholder="#">
+                    </div>
+                </div>
+                <div class="day0-toggle">
+                    <input type="checkbox" id="day0Check" onchange="toggleDay0()">
+                    <label for="day0Check">Flying in the day before? Add your departure city.</label>
+                </div>
+                <div id="day0Segment" class="segment day0-segment" style="display:none;">
+                    <div class="segment-title">Day 0 — Departure City</div>
+                    <div class="form-group">
+                        <label for="day0Location">City</label>
+                        <div class="location-wrapper">
+                            <input type="text" id="day0Location" placeholder="your departure city">
+                            <span class="location-status"></span>
+                        </div>
+                        <div class="location-error-msg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="segment main" id="mainSegment">
+                <div class="segment-header">
+                    <div class="segment-title">Main Trip</div>
+                </div>
+                <div class="standard-dates">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="cruise-day-label" style="display:none;">Day 1 — Embarkation</div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <div class="location-wrapper">
+                        <input type="text" id="location" placeholder="city, state / country" required>
+                        <span class="location-status"></span>
+                    </div>
+                    <div class="location-error-msg"></div>
+                </div>
+            </div>
+            
+            <div id="additionalSegments"></div>
+
+            <button class="btn btn-add" id="addSegmentBtn" onclick="addTripSegment()">+ Add Trip Segment</button>
+
+            <div id="debarkationSection" class="segment day0-segment" style="display:none;">
+                <div class="segment-title">Debarkation Port</div>
+                <div class="day0-toggle">
+                    <input type="checkbox" id="samePortCheck" checked onchange="toggleDebarkationPort()">
+                    <label for="samePortCheck">Same port as embarkation</label>
+                </div>
+                <div id="debarkationPortInput" style="display:none;">
+                    <div class="form-group">
+                        <label for="debarkationPort">Port</label>
+                        <div class="location-wrapper">
+                            <input type="text" id="debarkationPort" placeholder="port city, country">
+                            <span class="location-status"></span>
+                        </div>
+                        <div class="location-error-msg"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Advanced Options -->
+            <div class="advanced-options">
+                <div class="advanced-header" onclick="toggleAdvancedOptions()">
+                    <span class="advanced-title">⚙️ ADVANCED OPTIONS</span>
+                    <span class="toggle-icon" id="advancedToggle">▼</span>
+                </div>
+                <div class="advanced-content" id="advancedContent" style="display: none;">
+                    <p class="advanced-description" id="advancedDescription">Specify special occasions during your trip. Any unspecified days default to casual wear.</p>
+                    
+                    <div class="occasion-grid">
+                        <div class="occasion-item">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="semiFormalCheck" onchange="toggleOccasionInput('semiFormal')">
+                                <label for="semiFormalCheck">Semi-Formal Occasions</label>
+                            </div>
+                            <div class="occasion-input" id="semiFormalInput" style="display: none;">
+                                <input type="number" id="semiFormalDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                        
+                        <div class="occasion-item">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="formalCheck" onchange="toggleOccasionInput('formal')">
+                                <label for="formalCheck">Formal Occasions</label>
+                            </div>
+                            <div class="occasion-input" id="formalInput" style="display: none;">
+                                <input type="number" id="formalDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                        
+                        <div class="occasion-item">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="loungeCheck" onchange="toggleOccasionInput('lounge')">
+                                <label for="loungeCheck">Lounge / Relax Days</label>
+                            </div>
+                            <div class="occasion-input" id="loungeInput" style="display: none;">
+                                <input type="number" id="loungeDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                        
+                        <div class="occasion-item">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="adventureCheck" onchange="toggleOccasionInput('adventure')">
+                                <label for="adventureCheck">Adventure / Active Days</label>
+                            </div>
+                            <div class="occasion-input" id="adventureInput" style="display: none;">
+                                <input type="number" id="adventureDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                        
+                        <div class="occasion-item">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="beachCheck" onchange="toggleOccasionInput('beach')">
+                                <label for="beachCheck">Beach / Pool Days</label>
+                            </div>
+                            <div class="occasion-input" id="beachInput" style="display: none;">
+                                <input type="number" id="beachDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                        
+                        <div class="occasion-item" id="businessOccasionItem">
+                            <div class="occasion-checkbox">
+                                <input type="checkbox" id="businessCheck" onchange="toggleOccasionInput('business')">
+                                <label for="businessCheck">Business / Work Days</label>
+                            </div>
+                            <div class="occasion-input" id="businessInput" style="display: none;">
+                                <input type="number" id="businessDays" min="1" max="99" placeholder="# of days">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="formError" class="form-error" style="display: none;"></div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="generateCalendar()">Generate Packing Calendar</button>
+                <button class="btn btn-print" onclick="copyClientLink()">Copy Client Link</button>
+            </div>
+            <div class="share-link-wrap">
+                <span class="share-link-status" id="shareLinkStatus"></span>
+            </div>
+        </div>
+        
+        <div class="calendar-section" id="calendarSection" style="display: none;">
+            <div class="calendar-header">
+                <h2>Your Trip Calendar</h2>
+                <div class="calendar-controls">
+                    <p>Color-coded by weather conditions</p>
+                    <div class="temp-toggle">
+                        <button id="celsiusBtn" onclick="setTempUnit('C')">°C</button>
+                        <button id="fahrenheitBtn" class="active" onclick="setTempUnit('F')">°F</button>
+                    </div>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+        
+        <div class="packing-suggestions" id="packingSuggestions" style="display: none;">
+            <div class="packing-header">
+                <h2>Smart Packing Suggestions</h2>
+                <p>Personalized recommendations based on your destination weather conditions</p>
+                <button class="btn btn-print" onclick="window.print()">Print List</button>
+                <button class="btn btn-print" id="bagViewBtn" onclick="toggleBagView()">By Bag</button>
+            </div>
+            
+            <div class="weather-summary" id="weatherSummary"></div>
+
+            <div class="daily-planner" id="dailyPlanner">
+                <div class="planner-header" onclick="toggleDailyPlanner()">
+                    <span class="planner-title">Daily Outfit Planner</span>
+                    <span class="toggle-icon" id="plannerToggleIcon">▶</span>
+                </div>
+                <div id="dailyPlannerContent" style="display: none;"></div>
+            </div>
+
+            <div class="packing-categories" id="packingCategories"></div>
+        </div>
+    </div>
+
+    <script src="weather.js"></script>
+    <script src="render.js"></script>
+    <script src="packing.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
