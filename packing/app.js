@@ -22,8 +22,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Pre-fill from a shared client link, e.g. ?start=2026-08-01&end=2026-08-10&location=Rome
+// or a cruise link, e.g. ?mode=cruise&embark=2026-08-01&nights=7&location=Miami&ports=[...]
 function applyUrlPrefill() {
     const params = new URLSearchParams(window.location.search);
+
+    if (params.get('mode') === 'cruise') {
+        applyCruiseUrlPrefill(params);
+        return;
+    }
+
     const start = params.get('start');
     const end = params.get('end');
     const location = params.get('location');
@@ -41,17 +48,82 @@ function applyUrlPrefill() {
     }
 }
 
-// Build a shareable link pre-filled with the current standard-mode trip details
+function applyCruiseUrlPrefill(params) {
+    setCruiseMode(true);
+
+    const embark = params.get('embark');
+    const nights = params.get('nights');
+    const location = params.get('location');
+    const day0 = params.get('day0');
+    const debarkation = params.get('debarkation');
+    const portsRaw = params.get('ports');
+
+    if (embark) document.getElementById('embarkationDate').value = embark;
+    if (nights) document.getElementById('cruiseNights').value = nights;
+    if (location) {
+        const locationInput = document.getElementById('location');
+        locationInput.value = location;
+        validateLocationField(locationInput);
+    }
+
+    if (day0) {
+        document.getElementById('day0Check').checked = true;
+        toggleDay0();
+        const day0Input = document.getElementById('day0Location');
+        day0Input.value = day0;
+        validateLocationField(day0Input);
+    }
+
+    if (portsRaw) {
+        try {
+            const ports = JSON.parse(portsRaw);
+            ports.forEach(port => {
+                addTripSegment();
+                const segmentEl = document.getElementById(`segment-${segmentCounter}`);
+                if (!segmentEl) return;
+                const dayInput = segmentEl.querySelector('.cruise-day-number');
+                const locInput = segmentEl.querySelector('.segment-location');
+                if (dayInput && port.day) dayInput.value = port.day;
+                if (locInput && port.location) {
+                    locInput.value = port.location;
+                    validateLocationField(locInput);
+                }
+            });
+        } catch (e) {
+            console.error('Could not parse ports from client link:', e);
+        }
+    }
+
+    if (debarkation && debarkation !== location) {
+        document.getElementById('samePortCheck').checked = false;
+        toggleDebarkationPort();
+        const debarkInput = document.getElementById('debarkationPort');
+        debarkInput.value = debarkation;
+        validateLocationField(debarkInput);
+    }
+
+    if (embark && nights && location) {
+        generateCalendar();
+    }
+}
+
+// Build a shareable link pre-filled with the current trip details
 function copyClientLink() {
     const statusEl = document.getElementById('shareLinkStatus');
+    if (cruiseMode) {
+        copyCruiseClientLink(statusEl);
+    } else {
+        copyStandardClientLink(statusEl);
+    }
+}
+
+function copyStandardClientLink(statusEl) {
     const start = document.getElementById('startDate').value;
     const end = document.getElementById('endDate').value;
     const location = document.getElementById('location').value.trim();
 
-    if (cruiseMode || !start || !end || !location) {
-        statusEl.textContent = cruiseMode
-            ? 'Client links only support standard trips right now.'
-            : 'Fill in start date, end date, and location first.';
+    if (!start || !end || !location) {
+        statusEl.textContent = 'Fill in start date, end date, and location first.';
         return;
     }
 
@@ -61,6 +133,52 @@ function copyClientLink() {
     url.searchParams.set('end', end);
     url.searchParams.set('location', location);
 
+    copyUrlToClipboard(url, statusEl);
+}
+
+function copyCruiseClientLink(statusEl) {
+    const embark = document.getElementById('embarkationDate').value;
+    const nights = document.getElementById('cruiseNights').value;
+    const location = document.getElementById('location').value.trim();
+
+    if (!embark || !nights || !location) {
+        statusEl.textContent = 'Fill in embarkation date, nights, and embarkation port first.';
+        return;
+    }
+
+    const url = new URL(window.location.href);
+    url.search = '';
+    url.searchParams.set('mode', 'cruise');
+    url.searchParams.set('embark', embark);
+    url.searchParams.set('nights', nights);
+    url.searchParams.set('location', location);
+
+    if (document.getElementById('day0Check').checked) {
+        const day0Location = document.getElementById('day0Location').value.trim();
+        if (day0Location) url.searchParams.set('day0', day0Location);
+    }
+
+    const ports = [];
+    document.querySelectorAll('#additionalSegments .segment').forEach(segment => {
+        const dayInput = segment.querySelector('.cruise-day-number');
+        const locInput = segment.querySelector('.segment-location');
+        const day = dayInput ? parseInt(dayInput.value) : NaN;
+        const loc = locInput ? locInput.value.trim() : '';
+        if (!isNaN(day) && loc) ports.push({ day, location: loc });
+    });
+    if (ports.length > 0) {
+        url.searchParams.set('ports', JSON.stringify(ports));
+    }
+
+    if (!document.getElementById('samePortCheck').checked) {
+        const debarkPort = document.getElementById('debarkationPort').value.trim();
+        if (debarkPort) url.searchParams.set('debarkation', debarkPort);
+    }
+
+    copyUrlToClipboard(url, statusEl);
+}
+
+function copyUrlToClipboard(url, statusEl) {
     const shareUrl = url.toString();
 
     const showCopied = () => {
