@@ -7,6 +7,6 @@
   "tsconfig": "tsconfig.json",
   "buildCmd": "npm --prefix tool run build",
   "cssEntry": "styles-compiled.css",
-  "runtimeFontPrefixes": ["DM Sans", "Bebas Neue", "Geist Mono"],
+  "runtimeFontPrefixes": ["avenir-next", "itc-benguiat", "Geist Mono"],
   "readmeHeader": ".design-sync/conventions.md"
 }

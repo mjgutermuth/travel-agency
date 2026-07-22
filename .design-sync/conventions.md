@@ -88,4 +88,4 @@ function DestinationCard({ name, region, description }) {
 }
 ```
 
-> **Font note**: `font-sans` maps to DM Sans (Google Font, loaded at runtime). In Claude Design it falls back to `sans-serif`. `font-display` maps to Bebas Neue (display, uppercase headers).
+> **Font note**: `font-sans` maps to Avenir Next (Adobe Fonts/Typekit, loaded at runtime). `font-display` maps to ITC Benguiat (warm editorial serif, used for headlines/titles). Both are loaded via an Adobe Fonts kit link, not bundled — in Claude Design they fall back to `Georgia, serif`.

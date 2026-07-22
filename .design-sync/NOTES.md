@@ -13,21 +13,35 @@ No authored previews — all are floor cards ("preview not yet authored" placeho
 
 ### CSS entry must be manually refreshed after `next build`
 `tool/styles-compiled.css` is a copy of the Next.js production CSS output. Its chunk
-filename changes after every `npm --prefix tool run build`. To refresh after a build:
+filename changes after every `npm --prefix tool run build`. Next.js can emit more
+than one CSS chunk (e.g. a tiny font-loader chunk alongside the real Tailwind
+bundle) — **pick the largest one, not the alphabetically-first one**. Sorting by
+name silently grabbed the ~2KB font chunk instead of the ~130KB main bundle for
+several rebuilds in a row (caught 2026-07-22, before any bad upload went out —
+this file only feeds the design sync, not the live site, so nothing user-facing
+broke). To refresh after a build:
 
 ```bash
-cp tool/.next/static/chunks/$(ls tool/.next/static/chunks/*.css | head -1 | xargs basename) tool/styles-compiled.css
+cp tool/.next/static/chunks/$(ls -S tool/.next/static/chunks/*.css | head -1 | xargs basename) tool/styles-compiled.css
 ```
 
-Then re-sync so the updated CSS reaches Claude Design.
+Sanity-check afterward that it's actually the big one, e.g.
+`wc -c tool/styles-compiled.css` should read ~130KB+, not ~2KB. Then re-sync so
+the updated CSS reaches Claude Design.
 
-### Google Fonts not available in Claude Design
-`--font-dm-sans` and `--font-bebas` CSS variables are injected by `next/font/google`
-at Next.js runtime. They are undefined in Claude Design previews, so:
-- `font-sans` → falls back to `'DM Sans', sans-serif` → then `sans-serif`
-- `font-display` → falls back to `'Bebas Neue', sans-serif` → then `sans-serif`
+### Adobe Fonts (Typekit) not available in Claude Design
+As of the Benguiat/Avenir Next rebrand, `font-sans` and `font-display` are set
+directly to `'avenir-next-lt-pro'` and `'itc-benguiat'` — both loaded via an
+Adobe Fonts kit `<link>` in `app/layout.tsx` (`use.typekit.net/vif2iuw.css`),
+not `next/font/google`. Claude Design previews don't fetch that external
+stylesheet, so:
+- `font-sans` → falls back to `Georgia, serif` (the family's own CSS fallback)
+- `font-display` → falls back to `Georgia, serif`
 
 This is cosmetic only; component structure and token colors are correct.
+`runtimeFontPrefixes` in config.json (`avenir-next`, `itc-benguiat`) tells
+package-validate.mjs's FONT_MISSING check to treat these as expected-missing
+rather than warning.
 
 ### Tailwind CSS 4 `@import 'tailwindcss'` not esbuild-bundlable
 `tool/app/globals.css` uses the Tailwind CSS 4 `@import 'tailwindcss'` directive which
@@ -40,12 +54,18 @@ shadcn/ui exports all sub-components as named exports (e.g. `DialogTrigger`,
 behaviour — the design agent can use all of them.
 
 ## Re-sync command
+`shape: "package"` with `srcDir: "components/ui"` reads component source
+directly — no pre-built dist entry needed, so `--entry` is omitted.
+
 ```bash
-node .ds-sync/package-build.mjs \
+node .ds-sync/resync.mjs \
   --config .design-sync/config.json \
-  --entry tool/dist/index.es.js \
   --node-modules tool/node_modules \
-  --out ./ds-bundle
+  --out ./ds-bundle \
+  --remote <path to a locally-saved copy of the remote _ds_sync.json>
 ```
 
-Then run the upload sequence (see `/design-sync` skill for incremental path).
+The `--remote` sidecar has to be fetched first via `DesignSync get_file` (only
+that tool has auth) and saved to a local file — `resync.mjs` does the
+deterministic diff/build/validate/capture chain from there. Omitting `--remote`
+treats the project as never-synced and re-uploads everything.
