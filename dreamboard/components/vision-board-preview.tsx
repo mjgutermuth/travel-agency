@@ -2,13 +2,14 @@
 
 import { X, Sparkles } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import type { Destination } from "@/lib/destinations"
 import type { UploadedImage } from "@/components/image-uploader"
 import { vibes, type Vibe } from "@/lib/vibes"
 import { TripSummary } from "@/components/trip-summary"
+import { UNSPLASH_HOME_URL } from "@/lib/unsplash"
+import type { PinnedDestination } from "@/lib/destinations"
 
 interface VisionBoardPreviewProps {
-  pinnedDestinations: Destination[]
+  pinnedDestinations: PinnedDestination[]
   uploadedImages: UploadedImage[]
   selectedVibes: string[]
   onRemoveDestination: (id: string) => void
@@ -17,7 +18,15 @@ interface VisionBoardPreviewProps {
 }
 
 type BoardItem =
-  | { type: "destination"; id: string; imageUrl: string; label: string; sublabel: string }
+  | {
+      type: "destination"
+      id: string
+      imageUrl: string
+      label: string
+      sublabel: string
+      photographerName?: string
+      photographerUrl?: string
+    }
   | { type: "vibe"; id: string; imageUrl: string; label: string; sublabel: string }
   | { type: "upload"; id: string; imageUrl: string; label: string; sublabel: string }
 
@@ -75,9 +84,11 @@ export function VisionBoardPreview({
     ...pinnedDestinations.map(d => ({
       type: "destination" as const,
       id: d.id,
-      imageUrl: d.imageUrl,
+      imageUrl: d.image.url,
       label: d.name,
       sublabel: d.country,
+      photographerName: d.image.photographerName,
+      photographerUrl: d.image.photographerUrl,
     })),
     ...selectedVibeObjects.map(v => ({
       type: "vibe" as const,
@@ -120,6 +131,18 @@ export function VisionBoardPreview({
               alt={item.label}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
+            {item.type === "destination" && item.photographerName && (
+              <span className="absolute bottom-1 left-1.5 text-[10px] text-white/80 bg-black/30 backdrop-blur-sm px-1.5 py-0.5 rounded">
+                Photo:{" "}
+                <a href={item.photographerUrl} target="_blank" rel="noopener noreferrer" className="hover:text-white underline">
+                  {item.photographerName}
+                </a>{" "}
+                /{" "}
+                <a href={UNSPLASH_HOME_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white underline">
+                  Unsplash
+                </a>
+              </span>
+            )}
             <button
               onClick={() => handleRemove(item)}
               className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"

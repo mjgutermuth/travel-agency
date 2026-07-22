@@ -10,25 +10,26 @@ import { VisionBoardPreview } from "@/components/vision-board-preview"
 import { ImageUploader, type UploadedImage } from "@/components/image-uploader"
 import { IntakeForm, type IntakeFormData } from "@/components/intake-form"
 import { VibeSelector } from "@/components/vibe-selector"
-import { destinations, type Destination } from "@/lib/destinations"
+import { destinations, type Destination, type PinnedDestination } from "@/lib/destinations"
 import { vibes } from "@/lib/vibes"
+import type { ResolvedImage } from "@/lib/unsplash"
 
 const CALENDLY_URL = "https://calendly.com/wanderling/intake"
 
 export default function VisionBoardPage() {
-  const [pinnedDestinations, setPinnedDestinations] = useState<Destination[]>([])
+  const [pinnedDestinations, setPinnedDestinations] = useState<PinnedDestination[]>([])
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
   const [selectedVibes, setSelectedVibes] = useState<string[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const togglePin = useCallback((destination: Destination) => {
+  const togglePin = useCallback((destination: Destination, image: ResolvedImage) => {
     setPinnedDestinations(prev => {
       const isPinned = prev.some(d => d.id === destination.id)
       if (isPinned) {
         return prev.filter(d => d.id !== destination.id)
       }
-      return [...prev, destination]
+      return [...prev, { ...destination, image }]
     })
   }, [])
 
