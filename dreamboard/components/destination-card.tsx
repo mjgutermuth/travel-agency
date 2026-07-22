@@ -4,9 +4,8 @@ import Image from "next/image"
 import { Heart, MapPin, Shuffle } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { PhotoAttribution } from "@/components/photo-attribution"
 import type { Destination } from "@/lib/destinations"
-import { trackDownload, type ResolvedImage } from "@/lib/unsplash"
+import type { ResolvedImage } from "@/lib/unsplash"
 import { usePhotoCycle } from "@/hooks/use-photo-cycle"
 
 interface DestinationCardProps {
@@ -16,7 +15,7 @@ interface DestinationCardProps {
 }
 
 export function DestinationCard({ destination, isPinned, onTogglePin }: DestinationCardProps) {
-  const { currentImage, shuffle, canShuffle } = usePhotoCycle(destination.imageQuery, destination.fallbackImages)
+  const { currentImage, shuffle, canShuffle } = usePhotoCycle(destination.fallbackImages)
 
   const handleShuffle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -24,7 +23,6 @@ export function DestinationCard({ destination, isPinned, onTogglePin }: Destinat
   }
 
   const handleTogglePin = () => {
-    if (!isPinned) trackDownload(currentImage.downloadLocation)
     onTogglePin(destination, currentImage)
   }
 
@@ -71,7 +69,6 @@ export function DestinationCard({ destination, isPinned, onTogglePin }: Destinat
       </div>
       <CardContent className="p-4">
         <p className="text-sm text-muted-foreground line-clamp-2">{destination.description}</p>
-        <PhotoAttribution image={currentImage} className="mt-2" />
       </CardContent>
     </Card>
   )

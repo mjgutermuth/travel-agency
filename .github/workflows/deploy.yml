@@ -35,8 +35,6 @@ jobs:
       - name: Build vision board
         working-directory: dreamboard
         run: npm run build
-        env:
-          NEXT_PUBLIC_UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
 
       - name: Assemble site
         run: |

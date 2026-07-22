@@ -3,7 +3,6 @@
 import { Check, Shuffle } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { vibes, vibeCategories, type Vibe } from "@/lib/vibes"
-import { PhotoAttribution } from "@/components/photo-attribution"
 import { usePhotoCycle } from "@/hooks/use-photo-cycle"
 
 interface VibeSelectorProps {
@@ -16,7 +15,7 @@ function VibeCard({ vibe, isSelected, onToggle }: {
   isSelected: boolean
   onToggle: () => void
 }) {
-  const { currentImage, shuffle, canShuffle } = usePhotoCycle(vibe.imageQuery, vibe.fallbackImages)
+  const { currentImage, shuffle, canShuffle } = usePhotoCycle(vibe.fallbackImages)
 
   const handleShuffle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -66,12 +65,9 @@ function VibeCard({ vibe, isSelected, onToggle }: {
           <Check className="w-3.5 h-3.5 text-primary-foreground" />
         </div>
       )}
-      <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 text-left">
-        <span className="block text-white text-sm font-semibold leading-tight drop-shadow-sm">
-          {vibe.name}
-        </span>
-        <PhotoAttribution image={currentImage} className="text-white/60 mt-0.5" />
-      </div>
+      <span className="absolute bottom-0 left-0 right-0 px-3 py-2.5 text-white text-sm font-semibold text-left leading-tight drop-shadow-sm">
+        {vibe.name}
+      </span>
     </div>
   )
 }
