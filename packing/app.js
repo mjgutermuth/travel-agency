@@ -223,6 +223,7 @@ function setCruiseMode(enabled) {
     // Clear additional segments when switching modes to avoid stale data
     document.getElementById('additionalSegments').innerHTML = '';
     segmentCounter = 0;
+    renumberStops();
 }
 
 function toggleDay0() {
@@ -430,12 +431,25 @@ function addTripSegment() {
 
     // Continue the itinerary: default a new leg's start date to where the
     // previous one left off, so you're not re-typing a date you just entered.
+    // The overall Trip End Date is the one date that shouldn't be ambiguous —
+    // it's the last day of the whole trip, not just this leg — so default
+    // every new segment's end date to it too, on the assumption this is the
+    // last stop unless another segment gets added after it. Shortening an
+    // earlier leg's end date to make room for a later one is still manual,
+    // same as the start-date chaining above.
     if (!cruiseMode) {
         const startDateInput = segmentDiv.querySelector('.segment-start-date');
+        const endDateInput = segmentDiv.querySelector('.segment-end-date');
+        const tripEndDate = document.getElementById('endDate').value;
+
         if (startDateInput) {
             const previousEndDate = getPreviousSegmentEndDate(segmentDiv);
             if (previousEndDate) startDateInput.value = previousEndDate;
         }
+        if (endDateInput && tripEndDate) {
+            endDateInput.value = tripEndDate;
+        }
+        renumberStops();
     }
 }
 
@@ -454,6 +468,38 @@ function getPreviousSegmentEndDate(currentSegmentDiv) {
 function removeSegment(segmentId) {
     const segment = document.getElementById(segmentId);
     if (segment) segment.remove();
+    renumberStops();
+}
+
+const ORDINAL_WORDS = [
+    'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh',
+    'Eighth', 'Ninth', 'Tenth', 'Eleventh', 'Twelfth',
+];
+
+function ordinalWord(n) {
+    if (n >= 1 && n <= ORDINAL_WORDS.length) return ORDINAL_WORDS[n - 1];
+    return `${n}th`; // graceful fallback for unusually long itineraries
+}
+
+// Keeps "Destination"/"First Stop"/"Second Stop"/... in sync with each
+// segment's actual position, since segmentCounter (used for DOM ids) only
+// ever increases and doesn't reflect position after a middle segment gets
+// removed — without this, deleting stop 2 of 4 would leave "First Stop,
+// Third Stop, Fourth Stop" with a gap where "Second Stop" used to be.
+function renumberStops() {
+    if (cruiseMode) return;
+
+    const mainLabel = document.getElementById('mainLocationLabel');
+    const segments = document.querySelectorAll('#additionalSegments .segment');
+
+    if (mainLabel) {
+        mainLabel.textContent = segments.length > 0 ? 'First Stop' : 'Destination';
+    }
+
+    segments.forEach((segment, index) => {
+        const titleEl = segment.querySelector('.segment-title');
+        if (titleEl) titleEl.textContent = `${ordinalWord(index + 2)} Stop`;
+    });
 }
 
 function getAllSegments() {

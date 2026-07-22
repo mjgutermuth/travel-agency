@@ -123,6 +123,14 @@ body {
     font-style: italic;
 }
 
+.segment-hint {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: -6px;
+    margin-bottom: 16px;
+}
+
 #cruiseDateHeader {
     margin-bottom: 20px;
 }

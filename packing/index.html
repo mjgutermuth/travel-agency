@@ -61,14 +61,15 @@
                             <input type="date" id="startDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="endDate">End Date</label>
+                            <label for="endDate">Trip End Date</label>
                             <input type="date" id="endDate" required>
                         </div>
                     </div>
+                    <p class="segment-hint">Start and end dates for your whole trip — add stops below if you're visiting more than one place.</p>
                 </div>
                 <div class="cruise-day-label" style="display:none;">Day 1 — Embarkation</div>
                 <div class="form-group">
-                    <label for="location">Location</label>
+                    <label for="location" id="mainLocationLabel">Destination</label>
                     <div class="location-wrapper">
                         <input type="text" id="location" placeholder="city, state / country" required>
                         <span class="location-status"></span>
