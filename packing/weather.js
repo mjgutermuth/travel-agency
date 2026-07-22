@@ -29,38 +29,61 @@ async function _fetchLocationCoords(location) {
             location.split(',')[0].trim(),
             location.replace(/,/g, ' ').trim()
         ];
-        
+
         const parts = location.split(',').map(p => p.trim());
-        if (parts.length === 2 && stateAbbreviations[parts[1].toUpperCase()]) {
-            const fullStateName = stateAbbreviations[parts[1].toUpperCase()];
-            searchTerms.push(`${parts[0]}, ${fullStateName}`);
-            searchTerms.push(`${parts[0]} ${fullStateName}`);
-            searchTerms.push(`${parts[0]}, ${fullStateName}, USA`);
+
+        // If a US state was specified, remember its full name so we can pick the
+        // matching result out of an ambiguous list (the geocoder ignores commas
+        // entirely, so "Glen, NH" and "Glen, New Hampshire" both fall back to a
+        // bare "Glen" search that returns Glen, WV / NH / MT with no ranking by
+        // state — without this we'd silently take whichever comes first).
+        let expectedRegion = null;
+        if (parts.length === 2) {
+            const rawRegion = parts[1];
+            expectedRegion = stateAbbreviations[rawRegion.toUpperCase()] || rawRegion;
+            const fullStateName = stateAbbreviations[rawRegion.toUpperCase()];
+            if (fullStateName) {
+                searchTerms.push(`${parts[0]}, ${fullStateName}`);
+                searchTerms.push(`${parts[0]} ${fullStateName}`);
+                searchTerms.push(`${parts[0]}, ${fullStateName}, USA`);
+            }
         }
-        
+
         searchTerms.push(`${location}, USA`);
         searchTerms.push(`${location}, United States`);
-        
+
         for (const searchTerm of searchTerms) {
             const response = await fetch(
                 `${GEOCODING_URL}?name=${encodeURIComponent(searchTerm)}&count=5&language=en&format=json`
             );
-            
+
             if (!response.ok) continue;
-            
+
             const data = await response.json();
-            
+
             if (data.results && data.results.length > 0) {
-                const result = data.results[0];
+                let result = data.results[0];
+
+                // Multiple candidates for an ambiguous name (e.g. "Glen") — prefer
+                // whichever one actually matches the region/country the user typed.
+                if (expectedRegion && data.results.length > 1) {
+                    const match = data.results.find(r =>
+                        (r.admin1 && r.admin1.toLowerCase() === expectedRegion.toLowerCase()) ||
+                        (r.country && r.country.toLowerCase() === expectedRegion.toLowerCase())
+                    );
+                    if (match) result = match;
+                }
+
                 return {
                     latitude: result.latitude,
                     longitude: result.longitude,
                     name: result.name,
+                    region: result.admin1 || '',
                     country: result.country || result.admin1 || ''
                 };
             }
         }
-        
+
         return null;
     } catch (error) {
         console.error('Geocoding error:', error);

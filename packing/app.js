@@ -373,11 +373,18 @@ async function validateLocationField(input) {
     if (!wrapper) return;
 
     const statusEl = wrapper.querySelector('.location-status');
-    const errorEl = wrapper.querySelector('.location-error-msg');
+    // .location-error-msg is a sibling of .location-wrapper (both live under
+    // .form-group), not a descendant of it — this was silently failing before.
+    const errorEl = wrapper.parentElement
+        ? wrapper.parentElement.querySelector('.location-error-msg')
+        : null;
 
     input.classList.remove('location-valid', 'location-invalid');
     if (statusEl) statusEl.textContent = '';
-    if (errorEl) errorEl.textContent = '';
+    if (errorEl) {
+        errorEl.textContent = '';
+        errorEl.classList.remove('is-resolved');
+    }
 
     if (!value) return;
 
@@ -387,6 +394,15 @@ async function validateLocationField(input) {
     if (coords) {
         input.classList.add('location-valid');
         if (statusEl) statusEl.textContent = '✓';
+        if (errorEl) {
+            // Show exactly what this resolved to, since ambiguous names (e.g.
+            // "Glen, NH") can silently match the wrong place otherwise.
+            const parts = [coords.name];
+            if (coords.region && coords.region !== coords.name) parts.push(coords.region);
+            if (coords.country) parts.push(coords.country);
+            errorEl.textContent = `Resolved to: ${parts.join(', ')}`;
+            errorEl.classList.add('is-resolved');
+        }
     } else {
         input.classList.add('location-invalid');
         if (statusEl) statusEl.textContent = '✗';

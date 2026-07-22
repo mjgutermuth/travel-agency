@@ -329,6 +329,10 @@ body {
     margin-top: 4px;
 }
 
+.location-error-msg.is-resolved {
+    color: var(--teal);
+}
+
 .btn {
     padding: 0.9rem 2rem;
     border: none;
