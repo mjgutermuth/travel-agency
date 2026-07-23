@@ -147,10 +147,13 @@ Caveats:
   which is the same family lineage as the site's licensed "Avenir Next LT Pro" and
   renders effectively identically. Do not write "Avenir Next LT Pro" — that exact
   name isn't installed and won't match.
-- Only **Benguiat Pro ITC Bold Condensed** is currently activated locally (no
-  Book/Medium/Regular weight). Bold display headlines are fine; anything wanting a
-  lighter or non-condensed display weight will silently fall back to Georgia until
-  more styles are activated in Creative Cloud.
+- The full **Benguiat Pro ITC** range is now activated: Book, Medium, and Bold,
+  each in upright + italic, in both regular and condensed widths (12 faces total).
+  Adobe's desktop naming puts both widths under the *same* family name — condensed
+  vs. regular is a `Style` distinction, not a separate family — so just write
+  `'Benguiat Pro ITC'` and let normal `font-weight`/`font-style` selection resolve
+  it; the browser defaults to `font-stretch: normal`, which correctly picks the
+  regular (non-condensed) width unless you explicitly ask for condensed.
 - When quoting these inside a JSON-embedded template (e.g. a bundler's
   `__bundler/template` script content), use plain apostrophes — `\'` is not a valid
   JSON escape sequence and will corrupt the file.
