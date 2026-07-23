@@ -137,6 +137,35 @@ h1 {
   min-width: 280px;
 }
 
+.card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.card-body p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--magenta), var(--purple));
+  transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+
+.btn-secondary {
+  color: var(--text);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: #efe9df; }
+
 .return-home {
   display: block;
   text-align: center;
