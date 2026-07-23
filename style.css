@@ -570,6 +570,14 @@ strong { font-weight: 700; }
   font-weight: 700;
 }
 
+.contact-cta-divider {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 .contact-cta-fee {
   font-size: 0.85rem;
   color: var(--text-muted);

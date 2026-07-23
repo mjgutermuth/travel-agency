@@ -105,7 +105,7 @@ export default function VisionBoardPage() {
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="font-display text-3xl text-foreground mb-2">Vision Board Submitted!</h1>
+            <h1 className="font-display text-3xl text-foreground mb-2">Dreamboard submitted!</h1>
             <p className="text-muted-foreground">
               Thank you for sharing your travel dreams with me. Ready to talk it through? Grab a time below.
             </p>
@@ -114,7 +114,7 @@ export default function VisionBoardPage() {
 
         <Card className="max-w-2xl w-full shadow-lg rounded-2xl overflow-hidden">
           <CardHeader className="bg-secondary pb-6">
-            <CardTitle className="font-display font-normal text-2xl sm:text-3xl text-foreground text-center">Book a Call</CardTitle>
+            <CardTitle className="font-display font-normal text-2xl sm:text-3xl text-foreground text-center">Book a call</CardTitle>
           </CardHeader>
           <CardContent className="pt-4 pb-4 px-2 sm:px-4">
             <div
@@ -127,7 +127,7 @@ export default function VisionBoardPage() {
         </Card>
 
         <Button asChild variant="ghost">
-          <a href="https://wanderling.world">Return Home</a>
+          <a href="https://wanderling.world">Return home</a>
         </Button>
       </main>
     )
@@ -144,7 +144,7 @@ export default function VisionBoardPage() {
               Back
             </a>
           </Button>
-          <span className="font-semibold text-foreground">Create Your Vision Board</span>
+          <span className="font-semibold text-foreground">Create your dreamboard</span>
           <span className="font-display text-sm tracking-wide bg-gradient-to-br from-[#ff6b9d] via-[#a78bfa] to-[#4ecdc4] bg-clip-text text-transparent">
             WANDER/LING
           </span>
@@ -162,7 +162,7 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-accent uppercase mb-2">
             Personal Touch
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">Upload Your Inspiration</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">Upload your own inspiration</h2>
           <ImageUploader images={uploadedImages} onImagesChange={setUploadedImages} />
         </section>
 
@@ -171,9 +171,9 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-chart-3 uppercase mb-2">
             Browse & Pin
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Explore Destinations</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-2">Explore destinations</h2>
           <p className="text-muted-foreground mb-8">
-            Click the heart on any destination to add it to your vision board
+            Click the heart on any destination to add it to your dreamboard
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {destinations.map((destination) => (
@@ -192,7 +192,7 @@ export default function VisionBoardPage() {
           <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
             Your Board
           </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">My Vision Board</h2>
+          <h2 className="font-display text-3xl sm:text-4xl text-foreground mb-6">My Dreamboard</h2>
           <VisionBoardPreview
             pinnedDestinations={pinnedDestinations}
             uploadedImages={uploadedImages}
@@ -210,7 +210,7 @@ export default function VisionBoardPage() {
               <p className="text-xs font-medium tracking-widest text-primary uppercase mb-2">
                 Get In Touch
               </p>
-              <CardTitle className="font-display font-normal text-3xl sm:text-4xl text-foreground">Ready to Go?</CardTitle>
+              <CardTitle className="font-display font-normal text-3xl sm:text-4xl text-foreground">Ready to go?</CardTitle>
               <p className="text-muted-foreground">
                 Tell me about your dream trip and I&apos;ll help make it happen.
               </p>
