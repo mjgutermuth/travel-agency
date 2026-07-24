@@ -320,17 +320,24 @@ strong { font-weight: 700; }
   color: var(--text-muted);
 }
 
-/* Fora note */
-.fora-note {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
+/* Credentials */
+.credentials {
+  margin-top: 2rem;
   background: var(--bg-card);
   border: 2px solid transparent;
   border-left: 4px solid var(--purple);
   border-radius: 16px;
   padding: 1.5rem 2rem;
   box-shadow: var(--shadow);
+}
+
+.fora-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .fora-badge {
@@ -345,6 +352,19 @@ strong { font-weight: 700; }
 .fora-note p {
   color: var(--text-muted);
   font-size: 0.95rem;
+}
+
+.credentials-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.credential-badge {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* ---- DESTINATIONS ---- */
