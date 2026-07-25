@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -38,6 +39,15 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         {children}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-L613N613GB" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-L613N613GB');
+          `}
+        </Script>
       </body>
     </html>
   )
