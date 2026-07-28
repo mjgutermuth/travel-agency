@@ -654,6 +654,7 @@ async function generateCalendar() {
     try {
         const tripData = await generateTripData(segments);
         tripData.occasions = occasions;
+        tripData.notes = document.getElementById('tripNotes').value;
         if (cruiseMode) {
             const nights = parseInt(document.getElementById('cruiseNights').value);
             if (!isNaN(nights) && nights >= 1) {

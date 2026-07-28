@@ -1,3 +1,165 @@
+// NOTES-BASED SUGGESTIONS - free-text keyword matching
+// Each rule fires when any of its phrases appears as a whole word/phrase in
+// the user's trip notes (case-insensitive substring match against a curated
+// list — not general text understanding, so unrecognized phrasing is simply
+// ignored rather than guessed at).
+const NOTES_KEYWORD_RULES = [
+    {
+        label: 'convention/expo',
+        keywords: ['convention', 'comic con', 'gen con', 'gencon', 'trade show', 'expo'],
+        items: [
+            'Portable phone charger/battery pack (heavy phone use all day)',
+            'Bag or backpack for badge + swag',
+            'Blister pads or moleskin (hours of standing/walking on concrete)',
+            'Cash for artist alley / vendors',
+        ]
+    },
+    {
+        label: 'wedding',
+        keywords: ['wedding'],
+        items: [
+            'Check the dress code with the couple',
+            'Backup comfortable shoes for dancing',
+            'Small sewing kit or fashion tape',
+            'Card or gift',
+        ]
+    },
+    {
+        label: 'hiking/backpacking',
+        keywords: ['hike', 'hiking', 'backpacking', 'trailhead'],
+        items: [
+            'Blister prevention (moleskin or blister pads)',
+            'Trekking poles',
+            'Bug spray',
+            'Headlamp or flashlight',
+        ]
+    },
+    {
+        label: 'business conference',
+        keywords: ['conference', 'business trip', 'work trip'],
+        items: [
+            'Business cards',
+            'Laptop bag or padfolio',
+            'Extra charging cables for devices',
+        ]
+    },
+    {
+        label: 'photography',
+        keywords: ['photography', 'photoshoot', 'photo shoot'],
+        items: [
+            'Extra camera batteries',
+            'Memory cards',
+            'Lens cleaning cloth',
+            'Tripod',
+        ]
+    },
+    {
+        label: 'festival/concert',
+        keywords: ['festival', 'concert'],
+        items: [
+            'Earplugs',
+            'Portable phone charger',
+            'Bandana or dust mask',
+            'Cash for vendors',
+        ]
+    },
+    {
+        label: 'road trip',
+        keywords: ['road trip'],
+        items: [
+            'Snacks for the car',
+            'Phone mount',
+            'Offline music/podcasts or aux cable',
+            'Roadside emergency kit',
+        ]
+    },
+    {
+        label: 'skiing/snowboarding',
+        keywords: ['ski trip', 'skiing', 'snowboard', 'snowboarding'],
+        items: [
+            'Goggles',
+            'Hand/toe warmers',
+            'Base layers',
+            'Neck gaiter',
+        ]
+    },
+    {
+        // Word-boundary matching means "camping" won't fire on "glamping" —
+        // \bcamping\b requires a non-word character right before the "c",
+        // and "glamping" has "m" there instead.
+        label: 'camping',
+        keywords: ['camping', 'campsite', 'campground', 'tent camping'],
+        items: [
+            'Tent (check stakes/guy lines before you go)',
+            'Sleeping bag rated for expected overnight temps',
+            'Sleeping pad or air mattress',
+            'Headlamp + extra batteries',
+            'Camp stove + fuel',
+            'Cooler with ice packs',
+            'Bug spray',
+            'Firestarter or matches',
+            'Trash bags',
+            'Multi-tool or camp knife',
+        ]
+    },
+    {
+        // Deliberately items not already covered by the weather/occasion-driven
+        // Swimwear & Beach category (swimsuits, towel, flip-flops, etc.), so
+        // this doesn't just duplicate that section.
+        label: 'beach vacation',
+        keywords: ['beach vacation', 'beach trip', 'beach house'],
+        items: [
+            'Beach umbrella or sun shade',
+            'Beach games (frisbee, cards, paddleball)',
+            'Cooler bag for drinks/snacks',
+            'Snorkel gear (if planning to snorkel)',
+        ]
+    },
+    {
+        label: 'cruise excursions',
+        keywords: ['excursion', 'shore excursion'],
+        items: [
+            'Comfortable closed-toe shoes for excursions',
+            'Small daypack for excursions',
+            'Waterproof dry bag',
+            'Motion sickness medication',
+            'Printed excursion tickets/confirmations',
+        ]
+    },
+];
+
+function escapeRegExp(text) {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Matches whole words/phrases only (word-boundary regex) so short keywords
+// like "ski" don't fire on unrelated words like "skill".
+function getNotesBasedCategory(notes) {
+    if (!notes || !notes.trim()) return null;
+
+    const matchedLabels = [];
+    const items = [];
+    const seen = new Set();
+
+    NOTES_KEYWORD_RULES.forEach(rule => {
+        const hit = rule.keywords.some(kw => new RegExp(`\\b${escapeRegExp(kw)}\\b`, 'i').test(notes));
+        if (!hit) return;
+        matchedLabels.push(rule.label);
+        rule.items.forEach(item => {
+            if (!seen.has(item)) {
+                seen.add(item);
+                items.push(item);
+            }
+        });
+    });
+
+    if (items.length === 0) return null;
+
+    return {
+        items: [`<em>Matched from your notes: ${matchedLabels.join(', ')}</em>`, ...items]
+    };
+}
+
 // Smart packing suggestions generator
 function generateSmartPackingCategories(tripData) {
     // Overlapping segments (e.g. a later stop added without shortening the
@@ -454,6 +616,12 @@ function generateSmartPackingCategories(tripData) {
             items: altitudeItems,
             priority: veryHighAltitudeDays > 0 ? 'high' : 'medium'
         };
+    }
+
+    // NOTES-BASED SUGGESTIONS - keyword matches from the free-text trip notes
+    const notesCategory = getNotesBasedCategory(tripData.notes);
+    if (notesCategory) {
+        categories['From Your Notes'] = notesCategory;
     }
 
     return categories;
