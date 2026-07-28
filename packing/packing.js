@@ -121,7 +121,8 @@ function generateSmartPackingCategories(tripData) {
             activityItems.push(`<span class="quantity-highlight">${Math.ceil(adventureDays * 1.2)}</span> activewear outfit${adventureDays > 1 ? 's' : ''} (quick-dry, durable)`);
             activityItems.push('Sturdy hiking/adventure shoes');
             if (adventureDays >= 2) {
-                activityItems.push('Daypack for activities');
+                // Daypack itself lives in Travel Accessories (always packed) —
+                // just flag the water bottle need here.
                 activityItems.push('Water bottle');
             }
         }
@@ -177,23 +178,24 @@ function generateSmartPackingCategories(tripData) {
         coreItems.push('Zip-up hoodie or light jacket for layering (temperatures vary significantly)');
     }
 
-    // Core essentials - based on casual days, plus special occasion tops if specified
-    // Calculate tops: casual days need ~0.7 coverage, special occasions already counted separately
+    // Core essentials - tops for casual days only. Lounge/adventure/formal/
+    // semi-formal/business outfits are already itemized in their own
+    // categories below, so they're intentionally excluded here to avoid
+    // double-counting the same garments.
     const casualTops = casualDays > 0 ? Math.ceil(casualDays * 0.7) : 0;
-    const specialOccasionTops = semiFormalDays + formalDays + businessDays + Math.ceil(loungeDays * 0.7) + Math.ceil(adventureDays * 1.2);
-    const totalTops = casualTops + specialOccasionTops;
-    
-    if (totalTops > 0) {
+
+    if (casualTops > 0) {
         const topsNote = hotDays > 0 ? ' — favor lightweight, breathable fabrics' : '';
-        coreItems.push(`<span class="quantity-highlight">${totalTops}</span> tops or dresses${topsNote}`);
+        coreItems.push(`<span class="quantity-highlight">${casualTops}</span> top${casualTops > 1 ? 's' : ''} or dresses${topsNote}`);
     }
-    
+
     // Bottoms - more conservative, most occasions can reuse pants/jeans
     // Only for casual days; formal/business outfits already include bottoms
     if (casualDays > 0) {
         const casualBottoms = Math.ceil(casualDays * 0.5);
         if (casualBottoms > 0) {
-            const bottomsLabel = hotDays > 0 ? 'pairs of pants, jeans, or skirts' : 'pairs of pants/jeans';
+            const bottomsNoun = hotDays > 0 ? 'pants, jeans, or skirts' : 'pants/jeans';
+            const bottomsLabel = casualBottoms > 1 ? `pairs of ${bottomsNoun}` : `pair of ${bottomsNoun}`;
             coreItems.push(`<span class="quantity-highlight">${casualBottoms}</span> ${bottomsLabel}`);
         }
     }
@@ -207,6 +209,8 @@ function generateSmartPackingCategories(tripData) {
     // SWIMWEAR & BEACH GEAR
     const totalBeachDays = Math.max(swimWeatherDays, beachDays); // Use whichever is higher
     let flipFlopsAdded = false;
+    let towelAdded = false;
+    let phoneProtectionAdded = false;
     if (totalBeachDays >= 2 || beachDays > 0) {
         const swimItems = [];
 
@@ -225,18 +229,20 @@ function generateSmartPackingCategories(tripData) {
             swimItems.push('Beach towel');
             swimItems.push('Flip-flops or water shoes');
             flipFlopsAdded = true;
+            towelAdded = true;
         }
-        
+
         if ((extremeUVDays >= 2 && swimWeatherDays >= 3) || beachDays >= 3) {
             swimItems.push('Rash guard');
             swimItems.push('Wide-brim beach hat');
         }
-        
+
         if (beachDays >= 2) {
             swimItems.push('Beach bag');
             swimItems.push('Waterproof phone pouch');
+            phoneProtectionAdded = true;
         }
-        
+
         categories['Swimwear & Beach'] = { 
             items: swimItems,
             priority: (veryHotDays >= 3 || beachDays >= 3) ? 'medium' : undefined
@@ -300,8 +306,12 @@ function generateSmartPackingCategories(tripData) {
         }
         
         if (rainDays > 0) {
-            weatherItems.push('Waterproof phone/electronics case');
-            weatherItems.push(`<span class="quantity-highlight">${Math.ceil(rainDays/2)}</span> quick-dry towels`);
+            if (!phoneProtectionAdded) {
+                weatherItems.push('Waterproof phone/electronics case');
+            }
+            if (!towelAdded) {
+                weatherItems.push(`<span class="quantity-highlight">${Math.ceil(rainDays/2)}</span> quick-dry towels`);
+            }
         }
         
         if (snowDays > 0) {
@@ -317,7 +327,11 @@ function generateSmartPackingCategories(tripData) {
     
     // FOOTWEAR - Activity and weather specific
     const footwearItems = [];
-    footwearItems.push('Comfortable walking shoes');
+    // Adventure days already cover everyday walking with sturdy hiking/adventure
+    // shoes (Activity Wear) — don't also recommend a separate walking shoe.
+    if (adventureDays === 0) {
+        footwearItems.push('Comfortable walking shoes');
+    }
 
     let sandalsAdded = false;
     if (tripData.cruiseMode || hotDays >= 2) {
@@ -347,7 +361,9 @@ function generateSmartPackingCategories(tripData) {
         footwearItems.push('Wool or thermal socks');
     }
     
-    categories['Footwear'] = { items: footwearItems };
+    if (footwearItems.length > 0) {
+        categories['Footwear'] = { items: footwearItems };
+    }
     
     // ACCESSORIES - Smart essentials
     const accessoryItems = [];
