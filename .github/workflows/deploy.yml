@@ -42,6 +42,7 @@ jobs:
           cp index.html style.css script.js CNAME .nojekyll _site/
           cp -r packing _site/packing
           cp -r intake _site/intake
+          cp -r credentials _site/credentials
           mkdir -p _site/dreamboard
           cp -r dreamboard/out/. _site/dreamboard/
 
